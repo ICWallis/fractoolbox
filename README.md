@@ -9,11 +9,11 @@ Made for Python 3.3+
 
 ### New to python? Start here.
 
-If you are new to python, download the introductory Python course for geoscientists from [here](https://github.com/ddempsey/python_for_geoscientists) because it includes a quick-start guide and will set you on the pythonic path.  
+If you are new to python, download the 'Python for Geoscientists' course from [here](https://github.com/ddempsey/python_for_geoscientists) because it includes a quick-start guide and will set you on the pythonic path.  
 
-We recommend starting by downloading [Anaconda](https://www.anaconda.com/) to manage python and Juypter notebook installation because it comes with many of packages fractoolbox requires.  
+We recommend starting by downloading [Anaconda](https://www.anaconda.com/) to manage Python and Juypter notebook installation because it comes with many of packages fractoolbox requires.  
 
-The mplstereonet library is used in fractoolbox for geometric analysis and will need to be installed separately after you have installed Anaconda. Refer to https://github.com/joferkington/mplstereonet for installation instructions.
+The mplstereonet (Version: 0.6.dev0) library is used in fractoolbox for geometric analysis and will need to be installed separately after you have installed Anaconda. Refer to https://github.com/joferkington/mplstereonet for installation instructions. Note that mplstereonet versions older than 0.6 may not work with the latest version of matplotlib.
 
 Finally, using the green 'Code' button on this page, download and unzip a copy of this git repository and have fun exploring your own fracture data. 
 
