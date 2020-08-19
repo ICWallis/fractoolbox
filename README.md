@@ -13,6 +13,8 @@ If you are new to python, you can read about Juypter Notebooks [here](https://ju
 
 The mplstereonet library is used in fractoolbox for geometric analysis and will need to be installed separately after you have installed Anaconda. Refer to https://github.com/joferkington/mplstereonet for installation instructions.
 
+A introductory Python course for geoscientists can be found [here](https://github.com/ddempsey/python_for_geoscientists)
+
 ### License
 
 Apache-2.0
