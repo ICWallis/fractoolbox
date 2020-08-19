@@ -25,7 +25,7 @@ https://choosealicense.com/licenses/apache-2.0/
 
 ### Development
 
-To date, the content of fractoolbox has been generated during doctoral research undertaken by Irene Wallis, which is supervised by David Dempsey and Julie Rowland (JR) and includes code/math contributions from Evert Durán. The paper below illustrates use of these tools to interpret borehole image data acquired in high-temperature geothermal wells. 
+To date, the content of fractoolbox has been generated during doctoral research undertaken by [Irene Wallis](https://www.cubicearth.nz/), which is supervised by [David Dempsey](https://sites.google.com/view/dempsey-research-group/home) and [Julie (JR) Rowland](http://www.science.auckland.ac.nz/people/profile/j-rowland)  and includes code/math contributions from [Evert Durán](https://unidirectory.auckland.ac.nz/profile/e-quintero). The paper below illustrates use of these tools to interpret borehole image data acquired in high-temperature geothermal wells. 
 
 Wallis, I.C., Rowland, J. V. and Dempsey, D. E., Allan, G., Sidik, R., Martikno, R., McLean, K., Sihotang, M., Azis, M. and Baroek, M. 2020 (submitted) Approaches to imaging feedzone diversity with case studies from Sumatra, Indonesia, and the Taupō Volcanic Zone, New Zealand. New Zealand Geothermal Workshop: Waitangi, New Zealand.
 
