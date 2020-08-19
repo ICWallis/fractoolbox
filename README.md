@@ -9,7 +9,9 @@ Compatible with Python 3.3+
 
 ### New to python? Start here.
 
-If you are new to python, you can read more about what juypter notebooks are [here](https://jupyter.readthedocs.io/en/latest/) and we recommend using [Annaconda](https://www.anaconda.com/) to install the package and run them. Pandas, numpy and matplotlib comes standard with the data science version of Anaconda but you will need to install the mplstereonet library separately. Refer to https://github.com/joferkington/mplstereonet for mplstereonet installation instructions.
+If you are new to python, you can read about Juypter Notebooks [here](https://jupyter.readthedocs.io/en/latest/) but we recommend using [Anaconda](https://www.anaconda.com/) to manage installation because it the Anaconda for data science comes with many of the parts you need to run fractoolbox already in-built. 
+
+The mplstereonet library is used in fractoolbox for geometric analysis and will need to be installed separately after you have installed Anaconda. Refer to https://github.com/joferkington/mplstereonet for installation instructions.
 
 ### License
 
