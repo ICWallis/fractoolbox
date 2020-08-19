@@ -15,13 +15,13 @@ We recommend starting by downloading [Anaconda](https://www.anaconda.com/) to ma
 
 The mplstereonet library is used in fractoolbox for geometric analysis and will need to be installed separately after you have installed Anaconda. Refer to https://github.com/joferkington/mplstereonet for installation instructions.
 
-### Quick Start Guide
-
-Using the green 'Code' button on this page, download and unzip a copy of this repository and have fun exploring your own fracture data. 
+Finally, using the green 'Code' button on this page, download and unzip a copy of this git repository and have fun exploring your own fracture data. 
 
 ### License
 
-Apache 2.0 - see the LICENSE.md file for details
+Apache 2.0 
+
+https://choosealicense.com/licenses/apache-2.0/
 
 ### Development
 
