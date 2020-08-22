@@ -5,7 +5,7 @@ fractoolbox is in rapid development so the content of this repo will change regu
 
 The juypter notebooks are step-by-step walkthroughs of fractoolbox and other related libraries (such as mplstereonet). Some also describe the theory underlying the tools and point readers to relevant academic literature. If you are new to fractoolbox, these are a good place to start.
 
-Made for Python 3.3+
+Made with Python 3.6
 
 ### New to python? Start here.
 
