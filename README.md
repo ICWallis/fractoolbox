@@ -7,15 +7,32 @@ The juypter notebooks are step-by-step walkthroughs of fractoolbox and other rel
 
 Made for Python 3.3+
 
+### Explore without installation or download
+
+Click on the icon below to launch an instance of fractoolbox in your web browser. It may take a couple of minutes to load but it will allow you to interact with Juypter notebooks without downloading or installing anything on your machine. 
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ICWallis/fractoolbox/master)
+
 ### New to python? Start here.
 
 If you're new to python, download the 'Python for Geoscientists' course from [here](https://github.com/ddempsey/python_for_geoscientists) because it includes a quick-start guide and will set you on the pythonic path.  
 
 We recommend starting by downloading [Anaconda](https://www.anaconda.com/) to manage Python and Juypter Notebook installation because it comes with many of packages fractoolbox requires.  
 
-The mplstereonet (Version: 0.6.dev0) library is used in fractoolbox for geometric analysis and will need to be installed separately after you have installed Anaconda. Refer to https://github.com/joferkington/mplstereonet for installation instructions (Hint: open a mac/windows terminal or use the Anaconda terminal app and type 'pip install mplstereonet'). Note that mplstereonet versions older than 0.6 may not work with the latest version of matplotlib.
+There are two libraries used in fractoolbox that do not come standard with the Annaconda build. Once you you have installed Annaconda, these libraries may be installed by command-line:
 
-Finally, using the green 'Code' button on this page, download and unzip a copy of this git repository and have fun exploring your own fracture data. 
+> $ pip install mplstereonet
+> https://github.com/joferkington/mplstereonet
+
+Due to compatibility with resent versions of matplotlib, ensure you have mplstereonet version 0.6 or later.
+
+> $ pip install seaborn
+> https://seaborn.pydata.org/
+
+When mplstereonet is used after seaborn, there may be an issue with mplstereonet drawing plot elements like the grid. If this occurs, use sns.reset_defaults() just prior to building a stereonet with mplstereonet. 
+
+Now you are set up, use the green 'Code' button on this page to download a copy of this git repository. Unzip and have fun exploring your own fracture data. 
+
 
 ### License
 
