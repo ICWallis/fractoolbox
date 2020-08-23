@@ -167,7 +167,59 @@ alpha angles, code examples using the functions, and plots that show
 the impact of the blind zone on a range of well data. 
 '''
 
+def isogeniccontour(wpl, waz, sin_al):
+    '''
+    Method that parametrically generates an isogenic contour
+    '''
+    # Convert well azumuth/plunge to a vector p
+    # calls the three functions above
+    p = np.array([f(waz,wpl) for f in [unitvectorx, unitvectory, unitvectorz]])
+    #print('p =', p, '\n')
+    # make unit vector n1 that is perpendicular to p
+    # start with a random vector
+    n1 = np.random.rand(3)-0.5
+    # subtract the component parallel to p to create a perpendicular vector 
+    n1 -= np.dot(n1,p)*p
+    # normalise to make it a unit vector
+    n1 = n1/np.sqrt(np.dot(n1,n1))
+    # make a second vector n2 that is perpendicular to both p and n1
+    n2 = np.cross(p,n1)
+    # n1 and n2 now span a plane n that is normal to p
+    # find the point c where the plane n intersects the vector p for the given sin(alpha) sin_al
+    cos_al = np.cos(np.arcsin(sin_al)) 
+    # Scale the radius of the circle to sin(alpha)
+    # produces a list of vectors that ascribe the circle
+    ns = []
+    for th in np.linspace(0, 2*np.pi, 1000):
+        ns.append(sin_al*p+cos_al*(np.cos(th)*n1+np.sin(th)*n2))
+    ns = np.array(ns)
+    # checks if they are unit vectors
+    #print(np.sqrt(ns[:,0]**2+ns[:,1]**2+ ns[:,2]**2)) 
+    # convert ns to azumuth/plunge (strike/dip) so they can be plotted on a stereonet
+    strike, dip = mplstereonet.vector2pole(ns[:,0], ns[:,1], ns[:,2])
+    return strike,dip
+   
+# the following functions are the 'adapted' method to make the isogenic contours work
+def unitvectorx(az,pl):
+    #Calculate the unit vector for a pole or well path
+    #Input the pole/well azumuth and plunge
+    #Output the unit vector x component
+    x = -1 * np.sin(np.deg2rad(az)) * np.cos(np.deg2rad(pl))
+    return x
 
+def unitvectory(az,pl):
+    #Calculate the unit vector for a pole or well path
+    #Input the pole/well azumuth and plunge
+    #Output the unit vector y component
+    y = -1 * np.cos(np.deg2rad(az)) * np.cos(np.deg2rad(pl))
+    return y
+
+def unitvectorz(az,pl):
+    #Calculate the unit vector for a pole or well path
+    #Input the pole/well azumuth and plunge
+    #Output the unit vector z component
+    z = 1 * np.sin(np.deg2rad(pl))
+    return z
 
 
 # ====================
