@@ -127,7 +127,9 @@ by sampling a three-dimensional fracture network with a line.
 Simply put, fractures planes that are perpendicular to the line are 
 very likely to be intersected whereas those parallel to the line are 
 almost never intersected. This geometric sample bias generates a 'blind
-zone' in fracture datasets acquired along an outcrop scan-line or well-path. 
+zone' in fracture datasets where those which are near-parallel to the
+scan-line or well-path are rarely sampled. This blind zone is 
+sometimes also referred to as the 'well shadow'.
 
 Terzaghi (1965) proposed a methodology quantifies the geometric sample 
 bias using the acute angle (alpha) between the fracture plane and 
@@ -159,7 +161,13 @@ contours for stereonets so the effect of sample bias and the blind
 zone are visible to the interpreter. Refer to Wallis et al. (2020)
 for examples of these methods as applied micro-resistivity image 
 logs acquired in seven high-temperature geothermal wells.
+
+Refer to geometric-sample-bias.ipynb for an illustration of the 
+alpha angles, code examples using the functions, and plots that show
+the impact of the blind zone on a range of well data. 
 '''
+
+
 
 
 # ====================
