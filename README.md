@@ -14,7 +14,7 @@ Click on the icon below to launch an instance of fractoolbox in your web browser
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ICWallis/fractoolbox/master)
 
-When you click the binder link, it initially gives you a static view of this repo while it loads the requirements for an interactive view. If the interactive view takes more than a couple of minutes to load, click the 'show' button on the 'build logs' bar. This will open a black terminal-like window. If there is no text in that black window, close the browser window and clear the browser cache before trying again. The binder view has been tested with Firefox, Brave and Chrome browsers. Ad-blockers will interfere with binder loading. 
+It may take longer than usual for binder to load the interactive environment because fractoolbox is currently changed regularly and the environment will be built from scratch. 
 
 ### New to python? Start here.
 
