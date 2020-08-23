@@ -167,14 +167,94 @@ alpha angles, code examples using the functions, and plots that show
 the impact of the blind zone on a range of well data. 
 '''
 
+# The geometry in these unit vector functions are adapted from 
+# Priest (1993) to make the isogenic contours method work. The
+# difference is probably abstraction issue where Preist uses 
+# the pole (plane normal) throughout his book and I default to 
+# dip-azimuth and well-azimuth, as is typical in borehole 
+# analysis. I may at some point refactor the isogenic contour 
+# method and change these vector functions. 
+
+def unitvectorx(az,pl):
+    '''Calculate the unit vector for a pole or well path
+    
+    Args: 
+        az: Fracture dip azumuth or well azumuth
+        pl: Plunge
+    
+    Returns: The unit vector x component
+
+    '''
+    x = -1 * np.sin(np.deg2rad(az)) * np.cos(np.deg2rad(pl))
+    return x
+
+
+def unitvectory(az,pl):
+    '''Calculate the unit vector for a pole or well path
+
+    Args:
+        az: Fracture dip azumuth or well azumuth
+        pl: Plunge
+    
+    Returns: The  unit vector y component
+
+    '''
+    y = -1 * np.cos(np.deg2rad(az)) * np.cos(np.deg2rad(pl))
+    return y
+
+
+def unitvectorz(az,pl):
+    '''Calculate the unit vector for a pole or well path
+    
+    Args:
+        az: Fracture dip azumuth or well azumuth
+        pl: Plunge
+    
+    Returns: The  unit vector z component
+
+    '''
+    z = 1 * np.sin(np.deg2rad(pl))
+    return z
+
+
 def isogeniccontour(wpl, waz, sin_al):
     '''
-    Method that parametrically generates an isogenic contour
+    Parametrically calculates isogenic contours based on well path
+
+    Args:
+        wpl: Well plunge (0-90 degrees) which is the inclination of the
+            well path measured from a horizontal surface
+            
+            Suggestion: If the well deviation is relativity consistent, 
+                calculate the mean deviation magnitude (drillers dip) and 
+                subtract this angle from 90 to find the plunge. If there
+                are large variations in well geometry, then fracture data
+                may need to be split onto separate stereonets, each with a
+                set of isogenic contours calculated using that section's 
+                mean well deviation. 
+
+        waz: Well azimuth (0-360 degrees) which is the map direction
+            the well is deviated in
+
+            Suggestion: If the well azimuth is relativity consistent,
+                calculate the mean azimuth. If there are large variations
+                in well geometry, then proceeded as per suggestion made 
+                above for varying well plunge.
+
+        sin_al: Sin(alpha) (0.01 - 1) which is the contour intervals
+            that will ascribe on the stereonet the likelihood a 
+            fracture will be sampled
+
+            Suggestion: a float at 0.1 increments from 0.1 to 0.9
+
+    Returns: 
+        strike: Strike azimuth (0-360 degrees) based on the right hand rule
+        
+        dip: Dip magnatude (0-90 degrees)
+
     '''
     # Convert well azumuth/plunge to a vector p
-    # calls the three functions above
     p = np.array([f(waz,wpl) for f in [unitvectorx, unitvectory, unitvectorz]])
-    #print('p =', p, '\n')
     # make unit vector n1 that is perpendicular to p
     # start with a random vector
     n1 = np.random.rand(3)-0.5
@@ -193,33 +273,10 @@ def isogeniccontour(wpl, waz, sin_al):
     for th in np.linspace(0, 2*np.pi, 1000):
         ns.append(sin_al*p+cos_al*(np.cos(th)*n1+np.sin(th)*n2))
     ns = np.array(ns)
-    # checks if they are unit vectors
-    #print(np.sqrt(ns[:,0]**2+ns[:,1]**2+ ns[:,2]**2)) 
+    #print(np.sqrt(ns[:,0]**2+ns[:,1]**2+ ns[:,2]**2)) # checks if they are unit vectors
     # convert ns to azumuth/plunge (strike/dip) so they can be plotted on a stereonet
     strike, dip = mplstereonet.vector2pole(ns[:,0], ns[:,1], ns[:,2])
     return strike,dip
-   
-# the following functions are the 'adapted' method to make the isogenic contours work
-def unitvectorx(az,pl):
-    #Calculate the unit vector for a pole or well path
-    #Input the pole/well azumuth and plunge
-    #Output the unit vector x component
-    x = -1 * np.sin(np.deg2rad(az)) * np.cos(np.deg2rad(pl))
-    return x
-
-def unitvectory(az,pl):
-    #Calculate the unit vector for a pole or well path
-    #Input the pole/well azumuth and plunge
-    #Output the unit vector y component
-    y = -1 * np.cos(np.deg2rad(az)) * np.cos(np.deg2rad(pl))
-    return y
-
-def unitvectorz(az,pl):
-    #Calculate the unit vector for a pole or well path
-    #Input the pole/well azumuth and plunge
-    #Output the unit vector z component
-    z = 1 * np.sin(np.deg2rad(pl))
-    return z
 
 
 # ====================
