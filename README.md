@@ -6,15 +6,7 @@ fractoolbox is in rapid development so the content of this repo will change regu
 
 The Juypter Notebooks (.ipynb) are step-by-step walkthroughs of fractoolbox and other related libraries (such as mplstereonet). Some also describe the theory underlying the tools and point readers to relevant academic literature. If you are new to fractoolbox, these are a good place to start.
 
-Made for Python 3.3+
-
-### Explore without installation or download
-
-Click on the icon below to launch an instance of fractoolbox in your web browser. It may take a couple of minutes to load but binder will allow you to interact with fractoolbox without downloading or installing anything on your machine. 
-
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ICWallis/fractoolbox/master)
-
-It may take longer than usual for binder to load the interactive environment because fractoolbox is currently changed regularly and the environment will be built from scratch. 
+Made for Python 3.3+ 
 
 ### New to python? Start here.
 
