@@ -83,10 +83,30 @@ for thermstress, rtemp in zip(sigma_Dt_lst,rtemps):
     tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, thermstress, R, r, theta)
     ax.plot(theta*180/np.pi,tt,label=rtemp)
 
+# tensile rock strength
+ax.hlines(1,
+          0,360,
+          colors='k', 
+          linestyles='--', 
+          linewidth=2,
+          alpha=0.2)
+
+# compressive rock strength
+'''
+From Wyering et al (2014)
+-   shallower samples with low-temperature alteration UCS = 27.7 ± 10.3 MPa
+-   deeper samples with high-temperature alteration 84.8 ± 30.6 MPa
+Range used here is 20-30 for shallow and 70-100 for deep
+'''
+UCS = [(20,30),(70,100)]
+
+for top, bottom in UCS:
+    ax.axhspan(top, bottom, color='k', alpha=.2)
+
 ax.set_xlabel(r'Angle around the borehole wall [$\theta$ degrees]')
 ax.set_ylabel('Effective stress [MPa]')
-
 ax.set_xlim(0,360)
+ax.set_ylim(-60,120)
 ax.set_xticks([0,90,180,270,360])
 ax.legend(loc='upper right')
 
