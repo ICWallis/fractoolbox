@@ -40,7 +40,7 @@ for n in rtemps:
 
 # strike slip faulting case
 # stress/pressure in MPa
-SHmax_ss = 90
+SHmax_ss = 89
 Sv_ss = 88
 Shmin_ss = 40 
 
@@ -98,7 +98,7 @@ Range used here is 20-30 for shallow and 70-100 for deep
 '''
 
 for ax in [ax1,ax2]:
-    ax.set_xlabel(r'Angle around the borehole wall [deg]')
+    ax.set_xlabel(r'Angle on borehole wall [deg measured from the SHmax azumuth]')
     ax.set_xlim(0,360)
     ax.set_xticks([0,90,180,270,360])
     ax.legend(loc='upper right')
