@@ -21,7 +21,7 @@ The convention of - as tensile and + as compressive is used here.
 The thermal stress is subtracted from the hoop stress curves 
 and generate a shift in the negitive direction. 
 '''
-Twell = 40 + 273.14 # drilling gluid temp in Kelvin
+Twell = 50 + 273.14 # drilling gluid temp in Kelvin
 therex = 1.e-5 # coefficent of thermal expansion
 nu = 0.25 # Possions ratio
 K = 1.e10 # bulk modulus
@@ -84,6 +84,8 @@ for thermstress, rtemp in zip(sigma_Dt_lst,rtemps):
     plt.plot(theta*180/np.pi,tt,label=rtemp)
 
 
+plt.xlabel(r'Angle around the borehole wall [$\theta$ degrees]')
+plt.ylabel('Effective stress [MPa]')
 plt.legend()
 plt.show()
 
@@ -97,31 +99,8 @@ asdfag
 #plt.plot(theta*180/np.pi,zz,label=r'$\sigma_{zz}$')
 # the mean of this should = the mean stress?
 
-tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, 0., R, r, theta)
-plt.plot(theta*180/np.pi,tt,label=r'$\sigma_{\theta \theta}$ with DT = 0')
 
-tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, -2., R, r, theta)
-plt.plot(theta*180/np.pi,tt,label=r'$\sigma_{\theta \theta}$ with DT = 10')
 
-tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, -12., R, r, theta)
-plt.plot(theta*180/np.pi,tt,label=r'$\sigma_{\theta \theta}$ with DT = 80')
-
-tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, -22., R, r, theta)
-plt.plot(theta*180/np.pi,tt,label=r'$\sigma_{\theta \theta}$ with DT = 110')
-
-tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, -32., R, r, theta)
-plt.plot(theta*180/np.pi,tt,label=r'$\sigma_{\theta \theta}$ with DT = 160')
-
-tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, -42., R, r, theta)
-plt.plot(theta*180/np.pi,tt,label=r'$\sigma_{\theta \theta}$ with DT = 210')
-
-tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, -52., R, r, theta)
-plt.plot(theta*180/np.pi,tt,label=r'$\sigma_{\theta \theta}$ with DT = 260')
-
-plt.xlabel(r'$\theta$ (degrees)')
-plt.ylabel('Effective stress (MPa)')
-plt.legend()
-plt.show()
 
 
 
