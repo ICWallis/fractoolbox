@@ -77,9 +77,12 @@ plt.figure('Sigma rr',figsize=(10,5))
 # angles around the borehole wall
 theta = fun.ftheta(n)
 
-for n in sigma_Dt_lst:
-    tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, n, R, r, theta)
-    plt.plot(theta*180/np.pi,tt,label=n)
+# for f, b in zip(foo, bar):
+
+for thermstress, rtemp in zip(sigma_Dt_lst,rtemps):
+    tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, thermstress, R, r, theta)
+    plt.plot(theta*180/np.pi,tt,label=rtemp)
+
 
 plt.legend()
 plt.show()
