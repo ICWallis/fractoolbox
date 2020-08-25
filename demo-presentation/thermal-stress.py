@@ -21,7 +21,8 @@ The convention of - as tensile and + as compressive is used here.
 The thermal stress is subtracted from the hoop stress curves 
 and generate a shift in the negitive direction. 
 '''
-Twell = 50 + 273.14 # drilling gluid temp in Kelvin
+Twell_degC = 50
+Twell = Twell_degC + 273.14 # convert to kelvin
 therex = 1.e-5 # coefficent of thermal expansion
 nu = 0.25 # Possions ratio
 K = 1.e10 # bulk modulus
@@ -71,25 +72,27 @@ r = 1.0 # depth of investigation
 # where R = r we are at the borehole wall
 n = 200
 
+f, ax = plt.subplots(1, 1, figsize = (10, 5))
 
-plt.figure('Sigma rr',figsize=(10,5))
+#plt.figure('Sigma rr',figsize=(10,5))
 
 # angles around the borehole wall
 theta = fun.ftheta(n)
 
-# for f, b in zip(foo, bar):
-
 for thermstress, rtemp in zip(sigma_Dt_lst,rtemps):
     tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, thermstress, R, r, theta)
-    plt.plot(theta*180/np.pi,tt,label=rtemp)
+    ax.plot(theta*180/np.pi,tt,label=rtemp)
 
+ax.set_xlabel(r'Angle around the borehole wall [$\theta$ degrees]')
+ax.set_ylabel('Effective stress [MPa]')
 
-plt.xlabel(r'Angle around the borehole wall [$\theta$ degrees]')
-plt.ylabel('Effective stress [MPa]')
-plt.legend()
+ax.set_xlim(0,360)
+ax.set_xticks([0,90,180,270,360])
+ax.legend(loc='upper right')
+
+ax.set_title('Stress resolved onto the borehole wall, with fixed ' + str(Twell_degC) + 'degC mud and varying reservior temp' )
 plt.show()
 
-asdfag
 # Radial stress
 #rr = fun.sigma_rr(SHmax, Shmin, Pp, Pmud, R, r, theta)
 #plt.plot(theta*180/np.pi,rr,label=r'$\sigma_{rr}$')
