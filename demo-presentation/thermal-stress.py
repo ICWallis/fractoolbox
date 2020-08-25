@@ -87,28 +87,24 @@ theta = fun.ftheta(n)
 tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, 0., R, r, theta)
 plt.plot(theta*180/np.pi,tt,label=r'$\sigma_{\theta \theta}$ with DT = 0')
 
-#tt2 = fun.fsigma_tt(SHmax, Shmin, deltaP)
-#plt.plot(theta*180/np.pi,tt2,label=r'$\fsigma_{\theta \theta}$ with DT = 0')
+# contrast the above with fun.fsigma_tt 
 
-plt.show()
-asdf
-
-tt = stress.fsigma_tt(SHmax, Shmin, Pp, Pmud, -2., R, r, theta)
+tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, -2., R, r, theta)
 plt.plot(theta*180/np.pi,tt,label=r'$\sigma_{\theta \theta}$ with DT = 10')
 
-tt = stress.fsigma_tt(SHmax, Shmin, Pp, Pmud, -12., R, r, theta)
+tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, -12., R, r, theta)
 plt.plot(theta*180/np.pi,tt,label=r'$\sigma_{\theta \theta}$ with DT = 80')
 
-tt = stress.fsigma_tt(SHmax, Shmin, Pp, Pmud, -22., R, r, theta)
+tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, -22., R, r, theta)
 plt.plot(theta*180/np.pi,tt,label=r'$\sigma_{\theta \theta}$ with DT = 110')
 
-tt = stress.fsigma_tt(SHmax, Shmin, Pp, Pmud, -32., R, r, theta)
+tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, -32., R, r, theta)
 plt.plot(theta*180/np.pi,tt,label=r'$\sigma_{\theta \theta}$ with DT = 160')
 
-tt = stress.fsigma_tt(SHmax, Shmin, Pp, Pmud, -42., R, r, theta)
+tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, -42., R, r, theta)
 plt.plot(theta*180/np.pi,tt,label=r'$\sigma_{\theta \theta}$ with DT = 210')
 
-tt = stress.fsigma_tt(SHmax, Shmin, Pp, Pmud, -52., R, r, theta)
+tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, -52., R, r, theta)
 plt.plot(theta*180/np.pi,tt,label=r'$\sigma_{\theta \theta}$ with DT = 260')
 
 plt.xlabel(r'$\theta$ (degrees)')
