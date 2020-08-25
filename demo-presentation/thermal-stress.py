@@ -27,8 +27,9 @@ nu = 0.25 # Possions ratio
 K = 1.e10 # bulk modulus
 
 # thermal stress for reservior temps 50-300
+rtemps = [50,100,150,200,250,300]
 sigma_Dt_lst = []   
-for n in [50,100,150,200,250,300]:
+for n in rtemps:
     Tres = n + 273.14 # convert to Kelvin
     x = fun.fsigma_Dt(therex, K, nu, Tres, Twell)
     sigma_Dt_lst.append(x)
@@ -76,18 +77,25 @@ plt.figure('Sigma rr',figsize=(10,5))
 # angles around the borehole wall
 theta = fun.ftheta(n)
 
+for n in sigma_Dt_lst:
+    tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, n, R, r, theta)
+    plt.plot(theta*180/np.pi,tt,label=n)
+
+plt.legend()
+plt.show()
+
+asdfag
 # Radial stress
-#rr = stress.fsigma_rr(SHmax, Shmin, Pp, Pmud, R, r, theta)
+#rr = fun.sigma_rr(SHmax, Shmin, Pp, Pmud, R, r, theta)
 #plt.plot(theta*180/np.pi,rr,label=r'$\sigma_{rr}$')
 
 # Stress along the axis of the borehole
-#zz = stress.fsigma_zz(SHmax,Sv,Shmin,nu,Pp,R,r,theta,sigma_Dt) # the mean of this should = the mean stress?
+#zz = fun.effwbaxisstress(SHmax,Sv,Shmin,nu,Pp,R,r,theta,sigma_Dt) 
 #plt.plot(theta*180/np.pi,zz,label=r'$\sigma_{zz}$')
+# the mean of this should = the mean stress?
 
 tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, 0., R, r, theta)
 plt.plot(theta*180/np.pi,tt,label=r'$\sigma_{\theta \theta}$ with DT = 0')
-
-# contrast the above with fun.fsigma_tt 
 
 tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, -2., R, r, theta)
 plt.plot(theta*180/np.pi,tt,label=r'$\sigma_{\theta \theta}$ with DT = 10')
