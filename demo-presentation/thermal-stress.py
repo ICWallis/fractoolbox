@@ -30,34 +30,45 @@ for n in [50,100,150,200,250,300]:
 
 print(sigma_Dt_lst)
 
+sigma_Dt = np.asarray(sigma_Dt_lst)
+print(sigma_Dt)
+
 # Geomechanical model paramaters
 # ------------------------------
 '''
 Stress state and fluid pressures for a single depth 
 '''
 
-#SHmax=90 #MPa
-#Sv=88.2 #MPa
-#Shmin=51.5 #MPa
-#Pp=31.5 #MPa
-#Pmud=Pp #MPa
+# strike slip faulting case
+# stress/pressure in MPa
+'''
+SHmax = 90
+Sv = 88.2
+Shmin = 51.5 
+Pp = 31.5  # why is this Pp so high?
+Pmud = Pp 
+'''
 
-# Normal faulting case
-SHmax=26 #MPa
-Sv=88.232 #MPa
-Shmin=20 #MPa
-Pp=13. #MPa
-Pmud=14.75 
-nu=0.1
-R=1
-r=1.0
-n=200
+# normal faulting case
+# stress/pressure in MPa
+SHmax = 26
+Sv = 88.232 
+Shmin = 20 
+Pp = 13.
+Pmud = 14.75
 
-sigma_Dt = np.asarray(sigma_Dt_lst)
+# fixed paramaters 
+nu = 0.1
+R = 1
+r = 1.0
+n = 200
+
 
 plt.figure('Sigma rr',figsize=(10,5))
 
-theta = fn.ftheta(n)
+# angles around the borehole wall
+theta = fun.ftheta(n)
+
 
 #rr = stress.fsigma_rr(SHmax, Shmin, Pp, Pmud, R, r, theta)
 #plt.plot(theta*180/np.pi,rr,label=r'$\sigma_{rr}$')
