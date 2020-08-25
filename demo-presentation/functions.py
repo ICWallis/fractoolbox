@@ -1,4 +1,5 @@
 # Functions for use in these notebooks
+import numpy as np
 
 # Hoop stress
 # -----------
