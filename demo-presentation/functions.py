@@ -41,7 +41,7 @@ def fSradialV(SHmax, Shmin, Pp, Pmud, R, r, theta):
                 )
     return sigma_rr
 
-def fSeffhoopV(SHmax, Shmin, Pp, Pmud, sigma_Dt, R, r, theta):
+def effhoopstress(SHmax, Shmin, Pp, Pmud, sigma_Dt, R, r, theta):
     '''Calculates the magnatude of the effective hoop stess around the wellbore in a vertical well.
     #
     By convention is referred to as $\sigma_{\theta\theta}$
@@ -185,7 +185,9 @@ def fsigma_zz(sigma,nu,theta):
     return sigma_zz
 
 def fsigma_tt(sigma,theta,deltaP):
-    '''some explnation'''
+    '''some explnation
+    sigma theta theta with DT = 0
+    '''
     sigma_one = sigma[0][0]        # sigma_11 MPa
     sigma_two = sigma[1][1]        # sigma_22 MPa
     sigma_tauA = sigma[0][1]       # sigma_12 MPa
