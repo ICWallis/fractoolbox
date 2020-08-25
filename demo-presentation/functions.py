@@ -222,7 +222,8 @@ def fsigma_Dt(therex, K, nu, Tres, Twell):
     '''Thermally induced stess [MPa] assuming a steady state has been reached.
 
     A convention of - as tensile and + as compressive has been used
-    This convention means we use Twell-Tres here and that hoop stress calculations above add Sigma_Dt.
+    This convention means we use Twell-Tres here and that hoop stress 
+    calculations above add Sigma_Dt.
     Inputs:
     therex = Coefficent of thermal expansion [typically 1.e-5 per kelvin]
     K = bulk modulus [typcilly 1.e10]
