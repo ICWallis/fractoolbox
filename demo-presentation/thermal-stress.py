@@ -6,7 +6,7 @@ import functions as fun
 # Model of thermal stress at the borehole wall
 # ============================================
 '''
-Kirsh (1898) equations are used to calcuate the stresses resolved onto
+Kirsh (1898) equations are used to calculate the stresses resolved onto
 the wall of a borehole where the axis is parallel to the vertical component
 of the stress tensor. 
 Equations as presented in Jager et al. (2007) and Zoback (2010).
@@ -15,30 +15,30 @@ Equations as presented in Jager et al. (2007) and Zoback (2010).
 # Thermal Stress Magnatude
 # ------------------------
 '''
-Calculate the magnatude of thermally induced stess [MPa] for a  
-range of reservior tempratures and assuming steady state conditions.
+Calculate the magnitude of thermally induced stress [MPa] for a  
+range of reservoir temperatures and assuming steady state conditions.
 The convention of - as tensile and + as compressive is used here.
 The thermal stress is subtracted from the hoop stress curves 
-and generate a shift in the negitive direction. 
+and generate a shift in the negative direction. 
 '''
 Twell_degC = 50
 Twell = Twell_degC + 273.14 # convert to kelvin
-therex = 1.e-5 # coefficent of thermal expansion
+therex = 1.e-5 # coefficient of thermal expansion
 nu = 0.25 # Possions ratio
 K = 1.e10 # bulk modulus
 
 # thermal stress for reservior temps 50-300
 rtemps = [50,100,150,200,250,300]
-sigma_Dt_lst = []   
+thermal_stress_lst = []   
 for n in rtemps:
     Tres = n + 273.14 # convert to Kelvin
-    x = fun.fsigma_Dt(therex, K, nu, Tres, Twell)
-    sigma_Dt_lst.append(x)
+    x = fun.thermal_stress(therex, K, nu, Tres, Twell)
+    thermal_stress_lst.append(x)
 
-print(sigma_Dt_lst)
+print(thermal_stress_lst)
 
-sigma_Dt = np.asarray(sigma_Dt_lst)
-print(sigma_Dt)
+#sigma_Dt = np.asarray(sigma_Dt_lst)
+#print(sigma_Dt)
 
 # Geomechanical model paramaters
 # ------------------------------
@@ -48,44 +48,42 @@ Stress state and fluid pressures for a single depth
 
 # strike slip faulting case
 # stress/pressure in MPa
-'''
-SHmax = 90
-Sv = 88.2
-Shmin = 51.5 
-Pp = 31.5  # why is this Pp so high?
-Pmud = Pp 
-'''
+SHmax_ss = 90
+Sv_ss = 88
+Shmin_ss = 40 
 
 # normal faulting case
 # stress/pressure in MPa
-SHmax = 26
-Sv = 88.232 
-Shmin = 20 
+SHmax_nf = 26
+Sv_nf = 88 
+Shmin_nf = 20 
+
+# fluid pressures
 Pp = 13.
 Pmud = 14.75
-deltaP = Pmud - Pp
 
-# fixed paramaters 
-nu = 0.1
+# fixed paramaters
 R = 1 # wellbore radius
 r = 1.0 # depth of investigation
 # where R = r we are at the borehole wall
-n = 200
-
-f, ax = plt.subplots(1, 1, figsize = (10, 5))
-
-#plt.figure('Sigma rr',figsize=(10,5))
 
 # angles around the borehole wall
-theta = fun.ftheta(n)
+n = 200
+theta = fun.theta(n)
 
-for thermstress, rtemp in zip(sigma_Dt_lst,rtemps):
-    tt = fun.effhoopstress(SHmax, Shmin, Pp, Pmud, thermstress, R, r, theta)
-    ax.plot(theta*180/np.pi,tt,label=rtemp)
+f, (ax1,ax2) = plt.subplots(1, 2, figsize = (15, 5), sharey=True)
+
+for thermstress, rtemp in zip(thermal_stress_lst,rtemps):
+    tt = fun.effhoopstress(SHmax_nf, Shmin_nf, Pp, Pmud, thermstress, R, r, theta)
+    ax1.plot(theta*180/np.pi,tt,label=rtemp)
+
+for thermstress, rtemp in zip(thermal_stress_lst,rtemps):
+    tt = fun.effhoopstress(SHmax_ss, Shmin_ss, Pp, Pmud, thermstress, R, r, theta)
+    ax2.plot(theta*180/np.pi,tt,label=rtemp)
 
 # tensile rock strength
-ax.hlines(1,
-          0,360,
+for ax in [ax1,ax2]: 
+    ax.hlines(1, 0, 360,
           colors='k', 
           linestyles='--', 
           linewidth=2,
@@ -98,29 +96,26 @@ From Wyering et al (2014)
 -   deeper samples with high-temperature alteration 84.8 ± 30.6 MPa
 Range used here is 20-30 for shallow and 70-100 for deep
 '''
+
 UCS = [(20,30),(70,100)]
+for ax in [ax1,ax2]:
+    for top, bottom in UCS:
+        ax.axhspan(top, bottom, color='k', alpha=.2)
 
-for top, bottom in UCS:
-    ax.axhspan(top, bottom, color='k', alpha=.2)
+for ax in [ax1,ax2]:
+    ax.set_xlabel(r'Angle around the borehole wall [deg]')
+    ax.set_xlim(0,360)
+    ax.set_xticks([0,90,180,270,360])
+    ax.legend(loc='upper right')
 
-ax.set_xlabel(r'Angle around the borehole wall [$\theta$ degrees]')
-ax.set_ylabel('Effective stress [MPa]')
-ax.set_xlim(0,360)
-ax.set_ylim(-60,120)
-ax.set_xticks([0,90,180,270,360])
-ax.legend(loc='upper right')
+ax1.set_ylim(-60,120)
+ax1.set_ylabel('Effective stress [MPa]')
 
-ax.set_title('Stress resolved onto the borehole wall, with fixed ' + str(Twell_degC) + 'degC mud and varying reservior temp' )
+ax1.set_title('Normal faluting (small difference in horizontal stress)' )
+ax2.set_title('Strike-slip faluting (large difference in horizontal stress)' )
+
+plt.suptitle('Same depth (Sv) with a fixed ' + str(Twell_degC) + 'degC mud and varying reservior temp')
 plt.show()
-
-# Radial stress
-#rr = fun.sigma_rr(SHmax, Shmin, Pp, Pmud, R, r, theta)
-#plt.plot(theta*180/np.pi,rr,label=r'$\sigma_{rr}$')
-
-# Stress along the axis of the borehole
-#zz = fun.effwbaxisstress(SHmax,Sv,Shmin,nu,Pp,R,r,theta,sigma_Dt) 
-#plt.plot(theta*180/np.pi,zz,label=r'$\sigma_{zz}$')
-# the mean of this should = the mean stress?
 
 
 
