@@ -1,9 +1,7 @@
 # this method has been coded from PP 156-157 of Zoback 2010
-
-datapath = r'/Users/irene/Dropbox/PhD/WellData/ProcessedData/'
-figexportpath = r'/Users/irene/Dropbox/PhD/Manuscripts/NZGW20 Feedzones/BackgroundFigures/'
 # Python version = 3.6
 # conda env = tank
+# normalising to effective stress throughout
 
 from matplotlib import pyplot as plt
 import numpy as np
@@ -11,22 +9,12 @@ import math
 import pandas as pd
 import mplstereonet
 
-pd.set_option('display.width', 1000)
-pd.set_option('max_colwidth', 100) # made this longer because my tuple is so long that it will not display
-
-# my library
-#import stress as sts
-#import wsgtools as wsg
 import functions as fun
 
-# Jobs to do
-# ----------
-# does the coloumb falure criterion get normalised to effective vertical stress somehow? It seems to me to be just a gradient.
-# go back to the normalisation issue, because we are not generating ovelapping mohr plots again
+pd.set_option('display.width', 1000)
+# extend to tuple of params will display
+pd.set_option('max_colwidth', 100) 
 
-# -----------------------
-# IMPORT AND MASSAGE DATA
-# -----------------------
 
 # test fractures
 # -------------------------------------------------------------------------------
@@ -47,115 +35,18 @@ for df in [dffracs]:
     # compile my data into a tuple that can be used in the function using the following sequence (S1,S2,S3,Pp,Sv,alpha,beta,gamma,strike,dip)
     df['fracture'] = df[['Sv','SHmax','Shmin','Pp','Sv_eff','alpha','beta','gamma','strike','dip']].apply(tuple, axis=1)
 
-# ----------
-# THE METHOD
-# ----------
-# Do not change anything in this section
-# At some point this should be moved to the stress function library, 
-# but I would need to make the object definitons unique to do so
-
-def FractureSnTau(S1,S2,S3,Pp,Sv,alpha,beta,gamma,strike,dip):
-    '''Calculate the shear (tau) and normal (Sn) stress on a fracture
-
-    NOTE I need to check if Sv should really be Sv effective 
-    (because I've normalised by effective stress elsewhere)
-
-    Args:
-        S1:
-        S2:
-        S3:
-        Pp:
-        Sv:
-        alpha:
-        beta:
-        gamma:
-        strike:
-        dip:
-
-        Reccomendation: this can be efficently done using a tuple 
-    
-    Returns: 
-        Sn: Stress normal to the fracture plane [MPa]
-        tau: Shear stress on the fracture plane [MPa]
-
-    '''
-    # create effective stress array
-    Ss = np.array([                 
-                    [S1-Pp,0,0],
-                    [0,S2-Pp,0],
-                    [0,0,S3-Pp]
-                    ])
-    #print('Ss: the effective stress tensor =','\n',Ss,'\n')
-
-    # use the three Euiler angles to generate an array that is used 
-    # to transform the effective stress array into geographic coordinates
-    Rs = fun.Rs(alpha,beta,gamma)  
-    #print('Rs: the stress coordinate system based on' + 
-    #   'the inputted Euler angles =','\n',Rs,'\n')
-
-    # rotate the stress tensor into geographic cooridnates
-    Sg = Rs.T@Ss@Rs                 
-    #print('Sg: the effective stress tensor now rotated into' +
-    #   'geographic coordinates =','\n',Sg,'\n')
-
-    # use the fracture strike an dip to generate an array that is used
-    # to transform the stress field into fracture cooridinates
-    Rf = fun.Rf(strike,dip)        
-    #print('Rf: the matrix that rotates the stress tensor from' + '
-    #   'geographic coordinates into the fracture plane coordinates =','\n',Rf,'\n')
-
-    # transform the stress field into the fracture coordinate system
-    Sf = Rf@Sg@Rf.T                 
-    #print('Sf: the effective stress tensor now rotated into the' +'
-    #   fracture plane coordinate system =','\n',Sf,'\n')
-
-    # take stress normal to the fault plane and normalise it to 
-    # vertical stress so fractures from different depths can be plotted together
-    Sn = Sf[2,2]/Sv                 
-    #print('Sn: the effective stress magnitude normal to the' + '
-    #   'fault plane (Sf bottom right) normalised to Sv =','\n',Sn,'\n')
-
-    # calcuate the rake of the fracture assuming only dip-slip
-    rake = fun.rake(Sf)            
-    #print('the rake of the slip vector =',rake,'\n')
-
-    # use the rake to generate an array to transform the stress field into the rake
-    Rt = fun.Rt(rake)
-    #print('Array Rt that is used to transform the effective stress from the' + 
-    #   'fault co-ordinate system into the rake coordinate system so we can' + 
-    #   'grab the shear stress magnitude along the slip vector =','\n',Rt,'\n')
-
-    # transform the stress field into the direction of the rake
-    Sr = Rt@Sf@Rt.T
-    #print('Effective stress tensor along the slip vector (Sr) where the' + 
-    #   'bottom left (as an absolute number) is the shear stress magnitude (tau) =','\n',Sr,'\n')
-
-    # take the absolue number of shear stress in the direction of the rake 
-    # and normalise to vertical stress for plotting
-    tau = abs(Sr[2,0])/Sv
-    #print('Shear stress on the plane (tau, which is bottom left of Sr array) =',tau,'\n')
-
-    return (Sn,tau)
-
-# ---------------------------------
-# CALCULATE SHEAR AND NORMAL STRESS
-# ---------------------------------
-# Calls the method above to calculate the shear and normal stress for each fracture
-# method is set up to loop over multiple df when required
-
+# Calculate shear and normal stress magnatude
+# -------------------------------------------
 for df in [dffracs]:
     dalist = []
     for  S1,S2,S3,Pp,Sv,alpha,beta,gamma,strike,dip in df['fracture']:
-        Sn, tau = FractureSnTau(S1,S2,S3,Pp,Sv,alpha,beta,gamma,strike,dip)
+        Sn, tau = fun.fracture_sn_tau(S1,S2,S3,Pp,Sv,alpha,beta,gamma,strike,dip)
         dalist.append([Sn, tau])
     x = pd.Series(dalist)
     df['Sn_tau'] = x.values
 
-
-# ---------------------------------------------
-# CALCULATE THE RATIO OF SHEAR TO NORMAL STRESS
-# ---------------------------------------------
-# method is set up to loop over multiple df
+# Calculate the ratio of shear to normal stres
+# --------------------------------------------
 
 for df in [dffracs]:
     dalist = []
@@ -168,13 +59,8 @@ for df in [dffracs]:
 print(dffracs)
  
 
-# GENERATE MOHR PLOT OUTLINE
+# Generate Mohr plot parts
 # --------------------------
-# perhaps the problem is because i am taking absolute magnatudes rather than the magnatudes in geographic cooridnates?
-# because in geographic coordinates, I lose a bit in the rotation?
-
-# calling the shallowest (smallest) effective stress values
-# ---------------------------------------------------------
 
 # Min Sv value (use effective stress)
 Sigma1 = dffracs['Sv_eff'].min()

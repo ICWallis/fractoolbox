@@ -298,6 +298,98 @@ def Rt(rake):
                 ])
     return Rt
 
+
+
+def fracture_sn_tau(S1,S2,S3,Pp,Sv,alpha,beta,gamma,strike,dip):
+    '''Calculate the shear (tau) and normal (Sn) stress on a fracture
+
+    NOTE I need to check if Sv should really be Sv effective 
+    (because I've normalised by effective stress elsewhere)
+
+    Args:
+        S1:
+        S2:
+        S3:
+        Pp:
+        Sv:
+        alpha:
+        beta:
+        gamma:
+        strike:
+        dip:
+
+        Reccomendation: this can be efficently done using a tuple 
+    
+    Returns: 
+        Sn: Stress normal to the fracture plane [MPa]
+        tau: Shear stress on the fracture plane [MPa]
+
+    '''
+    # create effective stress array
+    Ss = np.array([                 
+                    [S1-Pp,0,0],
+                    [0,S2-Pp,0],
+                    [0,0,S3-Pp]
+                    ])
+    #print('Ss: the effective stress tensor =','\n',Ss,'\n')
+
+    # use the three Euiler angles to generate an array that is used 
+    # to transform the effective stress array into geographic coordinates
+    # x has been added to Rs to diffrenciate it to Rs above
+    Rsx = Rs(alpha,beta,gamma)  
+    #print('Rs: the stress coordinate system based on' + 
+    #   'the inputted Euler angles =','\n',Rsx,'\n')
+
+    # rotate the stress tensor into geographic cooridnates
+    Sg = Rsx.T@Ss@Rsx                 
+    #print('Sg: the effective stress tensor now rotated into' +
+    #   'geographic coordinates =','\n',Sg,'\n')
+
+    # use the fracture strike an dip to generate an array that is used
+    # to transform the stress field into fracture cooridinates
+    Rfx = Rf(strike,dip)        
+    #print('Rf: the matrix that rotates the stress tensor from' + '
+    #   'geographic coordinates into the fracture plane coordinates =','\n',Rf,'\n')
+
+    # transform the stress field into the fracture coordinate system
+    # x has been added to Rf to diffrenciate it to Rf above
+    Sf = Rfx@Sg@Rfx.T                 
+    #print('Sf: the effective stress tensor now rotated into the' +'
+    #   fracture plane coordinate system =','\n',Sf,'\n')
+
+    # take stress normal to the fault plane and normalise it to 
+    # vertical stress so fractures from different depths can be plotted together
+    Sn = Sf[2,2]/Sv                 
+    #print('Sn: the effective stress magnitude normal to the' + '
+    #   'fault plane (Sf bottom right) normalised to Sv =','\n',Sn,'\n')
+
+    # calcuate the rake of the fracture assuming only dip-slip
+    # x has been added to rake to diffrenciate it from rake function above
+    rakex = rake(Sf)            
+    #print('the rake of the slip vector =',rake,'\n')
+
+    # use the rake to generate an array to transform the stress field into the rake
+    Rtx = Rt(rakex)
+    #print('Array Rt that is used to transform the effective stress from the' + 
+    #   'fault co-ordinate system into the rake coordinate system so we can' + 
+    #   'grab the shear stress magnitude along the slip vector =','\n',Rt,'\n')
+
+    # transform the stress field into the direction of the rake
+    # x has been added to Rt to diffrencate it from the funcation above
+    Sr = Rtx@Sf@Rtx.T
+    #print('Effective stress tensor along the slip vector (Sr) where the' + 
+    #   'bottom left (as an absolute number) is the shear stress magnitude (tau) =','\n',Sr,'\n')
+
+    # take the absolue number of shear stress in the direction of the rake 
+    # and normalise to vertical stress for plotting
+    tau = abs(Sr[2,0])/Sv
+    #print('Shear stress on the plane (tau, which is bottom left of Sr array) =',tau,'\n')
+
+    return (Sn,tau)
+
+
+
+
 def sigma_m(bigS,smallS):
     '''
     Part of the set of functions required to generate a 3D Mohr plot
@@ -339,6 +431,8 @@ def sigma_n(bigS,smallS):
     theta=np.ndarray.tolist(np.linspace(0,180,50)*np.pi/180)
     sigma_n=((bigS+smallS)/2)+np.cos(2*theta)*(bigS-smallS)/2
     return sigma_n
+
+
 
 
 def mohr3d(S1,S2,S3,N):
