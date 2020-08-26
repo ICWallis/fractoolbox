@@ -8,8 +8,8 @@ data handling, frequency and geometric analysis, and reservoir geomechanics.
 Content
 -------
 Library content by section (and status)
--   Convert Fracture Data Format (started)
--   Geometric Sample Bias: Isogenic Contours (to come)
+-   Data Handling (in progress)
+-   Geometric Sample Bias: Isogenic Contours (in progress)
 -   Geomechanical Models (to come)
 -   3DMohr Plot Analysis (to come)
 
@@ -57,14 +57,14 @@ import numpy as np
 import mplstereonet
 import pandas as pd
 
-# ============================
-# Convert Fracture Data Format
-# ============================
+# =============
+# Data Handling
+# =============
 '''
 Tools to convert between the various ways fracture geometry are described
 
-Data Format Examples 
---------------------
+Structural Data Format Examples 
+-------------------------------
 The following examples all using the same fracture plane
 
     Borehole image log analysis:
@@ -123,25 +123,73 @@ def strike2dipaz(strike):
     return dipaz
 
 def xyzinterp(mDdat, mDsur, xsur, ysur, zsur):
-    '''Generates xyz for any pont on the well path using well survey data
-    Needs Pandas as pd and Numpy as np
-    Returns a dataframe with the mD, x, y, and z of the data
-    Ensure all data has the same datum (typically rig floor for well survey data)
-    Expects input objects to be coloumns from Pandas dataframes
-    mDdat - meters along the well path of the data
-    mDsur - meters along the well path from the survey file
-    xsur - easting location from the survey file in whatever co-ordinate system 
-    ysur - northing location from the survey file in whatever co-ordinate system
-    zsur - vertical depth in total vertical depth (will not work with elevation data)'''
+    '''Interpolates xyz for a pont on the well path
+    
+    Interpolation uses well survey data files and
+    z can be replaced with any other attribute.
+    Measured depth is the common value between the well survey data 
+    and data that is receving vaules (typically a dataframe of fractures)
+
+    Args:
+        xyzinterp expects input objects to be coloumns from Pandas dataframes
+        Ensure all data has the same datum (typically rig floor for well data)
+
+        mDdat: Meters along the well path of the data
+        mDsur: Meters along the well path from the survey file
+        xsur: Easting location from the survey file in whatever co-ordinate system 
+        ysur: Northing location from the survey file in whatever co-ordinate system
+        zsur: Vertical depth in total vertical depth (will not work with elevation data)
+            or any other coloumns in the survey dataframe (e.g. plunge or azumuth)
+
+    Returns:
+        A dataframe with the mD, x, y, and z at the depth MD
+        where z can be any data type
+    
+    Usage example:
+        # append well plunge to fracture dataframe
+        # dffracture: a pandas dataframe with fractures
+        # dfsurvey: a pandas dataframe with well survey data 
+    
+        mDdat = dffracture['depth_mMDRF']
+        mDsur = dfsurvey['depth_mMDRF']
+        xsur = dfsurvey['easting_m']
+        ysur = dfsurvey['northing_m']
+        zsur = dfsurvey['plunge']
+
+        dfxyz = ftb.xyzinterp(mDdat, mDsur, xsur, ysur, zsur) 
+        dfxyz.columns = ['Dpth_mMDRT','Northing','Easting','wellplunge']
+    
+        # combine calculated values into fracture dataframe
+        dffracture = pd.concat([dffracture,dfxyz1], axis=1, join='inner')
+    
+    '''
     dfout = pd.DataFrame()
     dfout['MD'] = mDdat
-    dfout['x'] = np.around((np.interp(np.asarray(mDdat.tolist()), np.asarray(mDsur.tolist()), np.asarray(xsur.tolist()))),2)
-    dfout['y'] = np.around((np.interp(np.asarray(mDdat.tolist()), np.asarray(mDsur.tolist()), np.asarray(ysur.tolist()))),2)
-    dfout['z'] = np.around((np.interp(np.asarray(mDdat.tolist()), np.asarray(mDsur.tolist()), np.asarray(zsur.tolist()))),2)
+    dfout['x'] = np.around(
+        (np.interp
+        (
+        np.asarray(mDdat.tolist()), 
+        np.asarray(mDsur.tolist()), 
+        np.asarray(xsur.tolist())
+        )
+        ),2)
+    dfout['y'] = np.around(
+        (np.interp
+        (
+        np.asarray(mDdat.tolist()),
+        np.asarray(mDsur.tolist()),
+        np.asarray(ysur.tolist())
+        )
+        ),2)
+    dfout['z'] = np.around(
+        (np.interp
+        (
+        np.asarray(mDdat.tolist()), 
+        np.asarray(mDsur.tolist()), 
+        np.asarray(zsur.tolist())
+        )
+        ),2)
     return dfout
-
-
-
 
 # ========================================
 # Geometric Sample Bias: Isogenic Contours
