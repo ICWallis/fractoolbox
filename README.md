@@ -6,7 +6,7 @@ fractoolbox is in rapid development so the content of this repo will change regu
 
 The Juypter Notebooks (.ipynb) in the main directory are step-by-step walkthroughs of fractoolbox and other related libraries (such as mplstereonet). Some also describe the theory underlying the tools and point readers to relevant academic literature. If you are new to fractoolbox, these are a good place to start.
 
-A series of Jupter Notebooks are included in the directory _published-case-study_ that describe the use of fractoolbox methods on data from geothermal wells in Indonesia and New Zealand. These notebooks are designed for training with geothermal operators. The paper that accompanies these Juypter Notebooks will be presented at this year's New Zealand Geothermal Workshop.     
+A series of Jupter Notebooks are included in the directory _published-case-study_ that describe fractoolbox methods applied to data from geothermal wells in Indonesia and New Zealand. These notebooks are designed for in-person training with geothermal operators. The paper that accompanies these Juypter Notebooks will be presented at this year's New Zealand Geothermal Workshop.     
 
 >Wallis, I.C., Rowland, J. V. and Dempsey, D. E., Allan, G., Sidik, R., Martikno, R., McLean, K., Sihotang, M., Azis, M. and Baroek, M. 2020 (submitted) Approaches to imaging feedzone diversity with case studies from Sumatra, Indonesia, and the Taupō Volcanic Zone, New Zealand. New Zealand Geothermal Workshop: Waitangi, New Zealand.
 
