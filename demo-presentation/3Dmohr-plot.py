@@ -187,26 +187,9 @@ print(Sigma2)
 # Min Shmin value
 Sigma3 = dffracs['Shmin_eff'].min()
 print(Sigma3)
-asdf
-# call the function that makes all of the components for the mohr plot
-# remeber that the last object passed into this is the normalisation value
-tauS, normS, meanS = sts.fMohr3DSvnorm(Sigma1,Sigma2,Sigma3,Sigma1) 
 
-# It is not yet clear if I need to make this rotation
-# MORE WORK REQUIRED
-'''
-# making the rotation and then drawing the values... do we need to rotate?? no??
-S = sts.fSsEf_GeoCoords(Sigma1,Sigma2,Sigma3,PoreP,30,0,90) # make the roation into geographic co-oridates for this one case
-print(S)
-
-# array positions for a strike slip case
-S1 = S[0,0] # S1
-S2 = S[2,2] # S2
-S3 = S[1,1] # S3
-N = S[2,2]  # bottom right is the vertical stress in all cases
-
-tauS, normS, meanS = sts.fMohr3DSvnorm(S1,S2,S3,N) # call the function that makes all of the components for the mohr plot
-'''
+# make the components for the 3D mohr plot
+tauS, normS, meanS = fun.mohr3d(Sigma1,Sigma2,Sigma3,Sigma1) 
 
 # Rearrange the Mohr values for plotting
 # --------------------------------------
@@ -248,8 +231,6 @@ for n in CFCSn:
 f = plt.figure(figsize=(8,4))
 ax1 = f.add_subplot(111)
 
-# Construct the 3D Mohr circles
-# -----------------------------
 # plot the coloumb falure criterion
 ax1.plot(CFCSn,CFCtau_1,c='k',linewidth=0.5)
 ax1.plot(CFCSn,CFCtau_pnt6,c='k',linewidth=0.5)
@@ -265,140 +246,11 @@ ax1.scatter(meanS,[0,0,0],color='k',marker='|')
 for normS, tauS in pltpairs['normStauS']:
     ax1.plot(normS,tauS,'k',linewidth=0.5)
 
-# Plot the isogenic contours
-# --------------------------
-
-#for Sn, tau, in dfiso_0pnt1['Sn_tau']:
-#    ax1.scatter(Sn,tau,s=3,c='#eee9f8')
-
-#for Sn, tau, in dfiso_0pnt2['Sn_tau']:
-#    ax1.scatter(Sn,tau,s=3,c='#cdbeec')
-
-#for Sn, tau, in dfiso_0pnt3['Sn_tau']:
-#    ax1.scatter(Sn,tau,s=3,c='#ac93e0')
-
-#for Sn, tau, in dfiso_0pnt4['Sn_tau']:
-#    ax1.scatter(Sn,tau,s=3,c='#8b67d3')
-
-#for Sn, tau, in dfiso_0pnt9['Sn_tau']:
-#    ax1.scatter(Sn,tau,s=3,c='#3e1b87')
-
 # Plot the fractures
-# ------------------
-# Filter the dataframes by lithology 
-# Refer to 3DMohrPlot-ProcessLogFractureDataset-Normal.ipynb Step 3 to generate and test these
-
-# Andesite (all occurance types in the stratigraphic unit)
-
-dfconductivenonhalo_andesite = dfconductivenonhalo[
-    (dfconductivenonhalo.Lith_PetroFacies == 'Lower Andesite') |
-    (dfconductivenonhalo.Lith_PetroFacies == 'Upper Andesite') |
-    (dfconductivenonhalo.Lith_PetroFacies == 'Other (Intrusive?)')
-].copy()
-
-dfconductivehalo_andesite = dfconductivehalo[
-    (dfconductivehalo.Lith_PetroFacies == 'Lower Andesite') |
-    (dfconductivehalo.Lith_PetroFacies == 'Upper Andesite') |
-    (dfconductivehalo.Lith_PetroFacies == 'Other (Intrusive?)')
-].copy()
-
-dffaults_andesite = dffaults[
-    (dffaults.Lith_PetroFacies == 'Lower Andesite')
-].copy()
-
-dfresistive_andesite = dfresistive[
-    (dfresistive.Lith_PetroFacies == 'Lower Andesite') |
-    (dfresistive.Lith_PetroFacies == 'Upper Andesite') |
-    (dfresistive.Lith_PetroFacies == 'Other (Intrusive?)')
-].copy()
-
-# all clastic units
-
-dfconductivenonhalo_clastic = dfconductivenonhalo[
-    (dfconductivenonhalo.Lith_PetroFacies == 'Mixed Volcaniclastics')
-].copy()
-
-dfconductivehalo_clastic = dfconductivehalo[
-    (dfconductivehalo.Lith_PetroFacies == 'Mixed Volcaniclastics')
-].copy()
-
-dffaults_clastic = dffaults[
-    (dffaults.Lith_PetroFacies == 'Mixed Volcaniclastics')
-].copy()
-
-dfresistive_clastic = dfresistive[
-    (dfresistive.Lith_PetroFacies == 'Mixed Volcaniclastics')
-].copy()
-
-# ignimbrite including the ash layers
-
-dfconductivenonhalo_ignimbrite = dfconductivenonhalo[
-    (dfconductivenonhalo.Lith_PetroFacies == 'Pyroclastic')
-].copy()
-
-dfconductivehalo_ignimbrite = dfconductivehalo[
-    (dfconductivehalo.Lith_PetroFacies == 'Pyroclastic')
-].copy()
-
-dffaults_ignimbrite = dffaults[
-    (dffaults.Lith_PetroFacies == 'Pyroclastic') |
-    (dffaults.Lith_PetroFacies == 'Ash')
-].copy()
-
-dfresistive_ignimbrite = dfresistive[
-    (dfresistive.Lith_PetroFacies == 'Pyroclastic')
-].copy()
-
-# Plot the andesite filtered data
-# -------------------------------
-for Sn, tau, in dfconductivenonhalo_andesite['Sn_tau']:
-    ax1.scatter(Sn,tau,s=6,c='#7f7f7f',marker='o')  # use #b2d1ce if plotting with the other colours
-
-#for Sn, tau, in dfconductivehalo_andesite['Sn_tau']:
-#    ax1.scatter(Sn,tau,s=10,c='#1a756e',marker='^')
-
-#for Sn, tau, in dffaults_andesite['Sn_tau']:
-#    ax1.scatter(Sn,tau,s=10,c='#00332f',marker='D')
-
-#for Sn, tau, in dfresistive_andesite['Sn_tau']:
-#    ax1.scatter(Sn,tau,s=8,c='#1a756e',marker='s')
-
-# Plot the ignimbrite filtered data
-# ---------------------------------
-#for Sn, tau, in dfconductivenonhalo_ignimbrite['Sn_tau']:
-#    ax1.scatter(Sn,tau,s=6,c='#7f7f7f',marker='o')  # use #d1b99d if plotting with the other colours
-
-#for Sn, tau, in dfconductivehalo_ignimbrite['Sn_tau']:
-#    ax1.scatter(Sn,tau,s=10,c='#976222',marker='^')
-
-#for Sn, tau, in dffaults_ignimbrite['Sn_tau']:
-#    ax1.scatter(Sn,tau,s=10,c='#462805',marker='D')
-
-#for Sn, tau, in dfresistive_ignimbrite['Sn_tau']:
-#    ax1.scatter(Sn,tau,s=8,c='#976222',marker='s')
-
-# Plot the clastic filtered data (same schema as above)
-# -----------------------------------------------------
-#for Sn, tau, in dfconductivenonhalo_clastic['Sn_tau']:
-#    ax1.scatter(Sn,tau,s=6,c='#7f7f7f',marker='o')  # use #d1b99d if plotting with the other colours
-
-#for Sn, tau, in dfconductivehalo_clastic['Sn_tau']:
-#    ax1.scatter(Sn,tau,s=10,c='#976222',marker='^')
-
-#for Sn, tau, in dffaults_clastic['Sn_tau']:
-#    ax1.scatter(Sn,tau,s=10,c='#462805',marker='D')
-
-#for Sn, tau, in dfresistive_clastic['Sn_tau']:
-#    ax1.scatter(Sn,tau,s=8,c='#976222',marker='s')
-
-# all conductive non-halo
-# -----------------------
-#for Sn, tau, in dfconductivenonhalo['Sn_tau']:
-#    ax1.scatter(Sn,tau,s=4,c='#7f7f7f',marker='o')
-
+for Sn, tau, in dffracs['Sn_tau']:
+    ax1.scatter(Sn,tau,s=6,c='k',marker='o')
 
 # Final formatting and output
-# ---------------------------
 ax1.set_ylim(0,0.45)
 ax1.set_xlim(0,1.2)
 ax1.set_aspect('equal')
@@ -408,21 +260,6 @@ ax1.set_xlabel(r'$(\sigma_n - Pp)/(Sv-Pp)$')
 ax1.set_ylabel(r'$ \tau_s/(Sv-Pp)$')
 
 #f.subplots_adjust(top=10)
-#plt.suptitle('Mohr circle testing with a normal faulting case (alpha = -60, beta = -90, gamma = 0)',fontsize=12)
+#plt.suptitle('title',fontsize=12)
 
-#plt.savefig(figexportpath + r'3DMohrPlots-NM10-plot-normal-Andesite.png',dpi=300,bbox_inches='tight')
-#plt.savefig(figexportpath + r'3DMohrPlots-NM10-plot-normal-IgAndClastic.png',dpi=300,bbox_inches='tight')
-#plt.savefig(figexportpath + r'3DMohrPlots-NM10-plot-normal-AllConductive.png',dpi=300,bbox_inches='tight')
-
-#plt.savefig(figexportpath + r'3DMohrPlots-NM10-plot-normal-Ig-Tilted.png',dpi=300,bbox_inches='tight')
-#plt.savefig(figexportpath + r'3DMohrPlots-NM10-plot-normal-Ig-Andersonian.png',dpi=300,bbox_inches='tight')
-#plt.savefig(figexportpath + r'3DMohrPlots-NM10-plot-normal-Ande-Andersonian.png',dpi=300,bbox_inches='tight')
-#plt.savefig(figexportpath + r'3DMohrPlots-NM10-plot-normal-Ande-Tilted.png',dpi=300,bbox_inches='tight')
-
-
-# export df for use in stereonet plots
-# one for each of the stress orentation cases
-#dfconductivenonhalo.to_csv(datapath + r'NM10-Fracs-SLB-ConductiveFracture-NonHalo-Merged-Snf-alpha-60beta-90gamma0.csv',index = None, header=True)
-#dfconductivenonhalo.to_csv(datapath + r'NM10-Fracs-SLB-ConductiveFracture-NonHalo-Merged-Snf-alpha-60beta-60gamma0.csv',index = None, header=True)
-
-#plt.show()
+plt.show()
