@@ -87,7 +87,7 @@ def FractureSnTau(S1,S2,S3,Pp,Sv,alpha,beta,gamma,strike,dip):
 
     # use the three Euiler angles to generate an array that is used 
     # to transform the effective stress array into geographic coordinates
-    Rs = sts.fRs(alpha,beta,gamma)  
+    Rs = fun.Rs(alpha,beta,gamma)  
     #print('Rs: the stress coordinate system based on' + 
     #   'the inputted Euler angles =','\n',Rs,'\n')
 
@@ -98,7 +98,7 @@ def FractureSnTau(S1,S2,S3,Pp,Sv,alpha,beta,gamma,strike,dip):
 
     # use the fracture strike an dip to generate an array that is used
     # to transform the stress field into fracture cooridinates
-    Rf = sts.fRf(strike,dip)        
+    Rf = fun.Rf(strike,dip)        
     #print('Rf: the matrix that rotates the stress tensor from' + '
     #   'geographic coordinates into the fracture plane coordinates =','\n',Rf,'\n')
 
@@ -114,11 +114,11 @@ def FractureSnTau(S1,S2,S3,Pp,Sv,alpha,beta,gamma,strike,dip):
     #   'fault plane (Sf bottom right) normalised to Sv =','\n',Sn,'\n')
 
     # calcuate the rake of the fracture assuming only dip-slip
-    rake = sts.frake(Sf)            
+    rake = fun.rake(Sf)            
     #print('the rake of the slip vector =',rake,'\n')
 
     # use the rake to generate an array to transform the stress field into the rake
-    Rt = sts.fRt(rake)
+    Rt = fun.Rt(rake)
     #print('Array Rt that is used to transform the effective stress from the' + 
     #   'fault co-ordinate system into the rake coordinate system so we can' + 
     #   'grab the shear stress magnitude along the slip vector =','\n',Rt,'\n')
