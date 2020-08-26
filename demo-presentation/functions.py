@@ -300,11 +300,10 @@ def Rt(rake):
 
 
 
-def fracture_sn_tau(S1,S2,S3,Pp,Sv,alpha,beta,gamma,strike,dip):
+def fracture_sn_tau(S1,S2,S3,Pp,Norm,alpha,beta,gamma,strike,dip):
     '''Calculate the shear (tau) and normal (Sn) stress on a fracture
 
-    NOTE I need to check if Sv should really be Sv effective 
-    (because I've normalised by effective stress elsewhere)
+    Normailsation can be to eaither vertical stress or effective vertical stress
 
     Args:
         S1:
@@ -359,7 +358,7 @@ def fracture_sn_tau(S1,S2,S3,Pp,Sv,alpha,beta,gamma,strike,dip):
 
     # take stress normal to the fault plane and normalise it to 
     # vertical stress so fractures from different depths can be plotted together
-    Sn = Sf[2,2]/Sv                 
+    Sn = Sf[2,2]/Norm                 
     #print('Sn: the effective stress magnitude normal to the' + '
     #   'fault plane (Sf bottom right) normalised to Sv =','\n',Sn,'\n')
 
@@ -382,7 +381,7 @@ def fracture_sn_tau(S1,S2,S3,Pp,Sv,alpha,beta,gamma,strike,dip):
 
     # take the absolue number of shear stress in the direction of the rake 
     # and normalise to vertical stress for plotting
-    tau = abs(Sr[2,0])/Sv
+    tau = abs(Sr[2,0])/Norm
     #print('Shear stress on the plane (tau, which is bottom left of Sr array) =',tau,'\n')
 
     return (Sn,tau)
