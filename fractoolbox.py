@@ -123,15 +123,15 @@ def strike2dipaz(strike):
     return dipaz
 
 def xyzinterp(mDdat, mDsur, xsur, ysur, zsur):
-    '''Interpolates xyz for a pont on the well path
+    '''Interpolates xyz for a point on the well path
     
     Interpolation uses well survey data files and
     z can be replaced with any other attribute.
     Measured depth is the common value between the well survey data 
-    and data that is receving vaules (typically a dataframe of fractures)
+    and data that is receiving values (typically a dataframe of fractures)
 
     Args:
-        xyzinterp expects input objects to be coloumns from Pandas dataframes
+        xyzinterp expects input objects to be columns from Pandas dataframes
         Ensure all data has the same datum (typically rig floor for well data)
 
         mDdat: Meters along the well path of the data
@@ -139,7 +139,7 @@ def xyzinterp(mDdat, mDsur, xsur, ysur, zsur):
         xsur: Easting location from the survey file in whatever co-ordinate system 
         ysur: Northing location from the survey file in whatever co-ordinate system
         zsur: Vertical depth in total vertical depth (will not work with elevation data)
-            or any other coloumns in the survey dataframe (e.g. plunge or azumuth)
+            or any other columns in the survey dataframe (e.g. plunge or azimuth)
 
     Returns:
         A dataframe with the mD, x, y, and z at the depth MD
@@ -252,7 +252,7 @@ def unitvectorx(az,pl):
     '''Calculate the unit vector for a pole or well path
     
     Args: 
-        az: Fracture dip azumuth or well azumuth
+        az: Fracture dip azimuth or well azimuth
         pl: Plunge
     
     Returns: The unit vector x component
@@ -266,7 +266,7 @@ def unitvectory(az,pl):
     '''Calculate the unit vector for a pole or well path
 
     Args:
-        az: Fracture dip azumuth or well azumuth
+        az: Fracture dip azimuth or well azimuth
         pl: Plunge
     
     Returns: The  unit vector y component
@@ -280,7 +280,7 @@ def unitvectorz(az,pl):
     '''Calculate the unit vector for a pole or well path
     
     Args:
-        az: Fracture dip azumuth or well azumuth
+        az: Fracture dip azimuth or well azimuth
         pl: Plunge
     
     Returns: The  unit vector z component
@@ -323,11 +323,11 @@ def isogeniccontour(wpl, waz, sin_al):
     Returns: 
         strike: Strike azimuth (0-360 degrees) based on the right hand rule
         
-        dip: Dip magnatude (0-90 degrees)
+        dip: Dip magnitude (0-90 degrees)
     
     Function developed by David Dempsey and Irene Wallis
     '''
-    # Convert well azumuth/plunge to a vector p
+    # Convert well azimuth/plunge to a vector p
     p = np.array([f(waz,wpl) for f in [unitvectorx, unitvectory, unitvectorz]])
     # make unit vector n1 that is perpendicular to p
         # start with a random vector
