@@ -17,6 +17,7 @@ pd.set_option('max_colwidth', 100)
 
 # Import data and setup dataframe
 # --------------------------------
+'''
 dffracs = pd.read_csv(r'demo-presentation/3Dmohr-plot-fractures.csv')
 
 # add three fractures to the dataframe, one each that is perpendicular to the principal stresses
@@ -30,24 +31,23 @@ extras = [
         pd.Series([7, 2000, 90, '', 120, 16.41, 39.20, 25.12, 32.16], index=dffracs.columns) 
         ]
 dffracs = dffracs.append(extras, ignore_index=True)
-
+'''
 # Synthetic data for play example
 # -------------------------------
-'''
+
 fracture = {
-    'ID': [],
-    'mVD': [],
-    'dip': [],
-    'strike': [],
-    'Pp': [],
-    'Sv': [],
-    'Shmin': [],
-    'SHmax': [],
+    'ID': [1],
+    'mVD': [2000],
+    'dip': [600],
+    'strike': [50],
+    'Pp': [16.41],
+    'Sv': [39.20],
+    'Shmin': [25.12],
+    'SHmax': [32.16],
 }
 
-dftest = pd.DataFrame(data=fracture)
-dftest
-'''
+dffracs = pd.DataFrame(data=fracture)
+
 # append stress field orentation and make a tuple for Sn Tau calculation
 # ----------------------------------------------------------------------
 # alpha: az of SHmax
@@ -67,35 +67,28 @@ for df in [dffracs]:
 for df in [dffracs]:
     dalist = []
     for  S1,S2,S3,Pp,Sv,alpha,beta,gamma,strike,dip in df['fracture']:
-        Sn, tau = fun.fracture_sn_tau(S1,S2,S3,Pp,Sv,alpha,beta,gamma,strike,dip)
-        dalist.append([Sn, tau])
-    x = pd.Series(dalist)
-    df['Sn_tau'] = x.values
+        dalist.append(fun.fracture_sn_tau(S1,S2,S3,Pp,Sv,alpha,beta,gamma,strike,dip))
+    df['Sn_tau'] = pd.Series(dalist).values
 
 # Calculate the ratio of shear to normal stres
 # --------------------------------------------
 for df in [dffracs]:
     dalist = []
     for Sn, tau, in df['Sn_tau']:
-        ratio = tau/Sn
-        dalist.append(ratio)
-    x = pd.Series(dalist)
-    df['ratio'] = x.values
+        dalist.append(tau/Sn)
+    df['ratio'] = pd.Series(dalist).values
 
 # Generate Mohr plot parts
 # --------------------------
 
 # Min Sv value (use effective stress)
 Sigma1 = dffracs['Sv_eff'].min()
-print(Sigma1)
 
 # Min SHmax value
 Sigma2 = dffracs['SHmax_eff'].min()
-print(Sigma2)
 
 # Min Shmin value
 Sigma3 = dffracs['Shmin_eff'].min()
-print(Sigma3)
 
 # make the components for the 3D mohr plot
 tauS, normS, meanS = fun.mohr3d(Sigma1,Sigma2,Sigma3,Sigma1) 
@@ -118,20 +111,17 @@ CFCSn = [0,100]
 # mu of 0.5
 CFCtau_pnt5 = []
 for n in CFCSn:
-    x = 0.5 * n
-    CFCtau_pnt5.append(x)
+    CFCtau_pnt5.append(0.5 * n)
 
 # mu of 0.6
 CFCtau_pnt6 = []
 for n in CFCSn:
-    x = 0.6 * n
-    CFCtau_pnt6.append(x)
+    CFCtau_pnt6.append(0.6 * n)
 
 # mu of 1
 CFCtau_1 = []
 for n in CFCSn:
-    x = 1 * n
-    CFCtau_1.append(x)
+    CFCtau_1.append(1 * n)
 
 # Draw the plot
 # -------------
