@@ -48,10 +48,10 @@ fracture = {
 
 dffracs = pd.DataFrame(data=fracture)
 
-# append stress field orentation and make a tuple for Sn Tau calculation
-# ----------------------------------------------------------------------
+# append stress field orientation and make a tuple for Sn Tau calculation
+# -----------------------------------------------------------------------
 # alpha: az of SHmax
-# beta: tils of Sv, -90 is the origional and -60 is the 30 deg tilted for the case study
+# beta: tils of Sv, -90 is the original and -60 is the 30 deg tilted for the case study
 for df in [dffracs]:
     df['alpha'] = -60 
     df['beta'] = -90 
@@ -101,8 +101,8 @@ pltpairs = {
     (normS[2],tauS[2])]   # sigma2, sigma3 circle
 }
 
-# Make coloumb falure criterion
-# -----------------------------
+# Make-Mohr=Coulomb failure criterion
+# -----------------------------------
 # Generate data to make the criterion lines on the plots 
 # following the format used in Barton et al 1995
 
@@ -162,4 +162,4 @@ ax1.set_ylabel(r'$ \tau_s/(Sv-Pp)$')
 #f.subplots_adjust(top=10)
 #plt.suptitle('title',fontsize=12)
 
-plt.show()
+plt.show() 
