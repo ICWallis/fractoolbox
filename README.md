@@ -19,7 +19,7 @@ We recommend starting by downloading [Anaconda](https://www.anaconda.com/) to ma
 
 Note that fractoolbox is made for Python 3.x
 
-There are two libraries used in fractoolbox that do not come standard with the Annaconda build. Once you you have installed Annaconda, these libraries may be installed by command-line:
+There are two libraries used in fractoolbox that do not come standard with the Annaconda build. Once you you have installed Annaconda, these libraries may be installed using _anaconda prompt_ by typing:
 
 > $ pip install mplstereonet
 
