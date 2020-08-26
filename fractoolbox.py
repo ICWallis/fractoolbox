@@ -53,6 +53,10 @@ fractoolbox is distributed under an Apache 2.0 licence
 https://choosealicense.com/licenses/apache-2.0/
 
 '''
+import numpy as np
+import mplstereonet
+import pandas as pd
+
 # ============================
 # Convert Fracture Data Format
 # ============================
@@ -117,6 +121,27 @@ def strike2dipaz(strike):
     else:
         dipaz=strike+90
     return dipaz
+
+def xyzinterp(mDdat, mDsur, xsur, ysur, zsur):
+    '''Generates xyz for any pont on the well path using well survey data
+    Needs Pandas as pd and Numpy as np
+    Returns a dataframe with the mD, x, y, and z of the data
+    Ensure all data has the same datum (typically rig floor for well survey data)
+    Expects input objects to be coloumns from Pandas dataframes
+    mDdat - meters along the well path of the data
+    mDsur - meters along the well path from the survey file
+    xsur - easting location from the survey file in whatever co-ordinate system 
+    ysur - northing location from the survey file in whatever co-ordinate system
+    zsur - vertical depth in total vertical depth (will not work with elevation data)'''
+    dfout = pd.DataFrame()
+    dfout['MD'] = mDdat
+    dfout['x'] = np.around((np.interp(np.asarray(mDdat.tolist()), np.asarray(mDsur.tolist()), np.asarray(xsur.tolist()))),2)
+    dfout['y'] = np.around((np.interp(np.asarray(mDdat.tolist()), np.asarray(mDsur.tolist()), np.asarray(ysur.tolist()))),2)
+    dfout['z'] = np.around((np.interp(np.asarray(mDdat.tolist()), np.asarray(mDsur.tolist()), np.asarray(zsur.tolist()))),2)
+    return dfout
+
+
+
 
 # ========================================
 # Geometric Sample Bias: Isogenic Contours
@@ -251,16 +276,17 @@ def isogeniccontour(wpl, waz, sin_al):
         strike: Strike azimuth (0-360 degrees) based on the right hand rule
         
         dip: Dip magnatude (0-90 degrees)
-
+    
+    Function developed by David Dempsey and Irene Wallis
     '''
     # Convert well azumuth/plunge to a vector p
     p = np.array([f(waz,wpl) for f in [unitvectorx, unitvectory, unitvectorz]])
     # make unit vector n1 that is perpendicular to p
-    # start with a random vector
+        # start with a random vector
     n1 = np.random.rand(3)-0.5
-    # subtract the component parallel to p to create a perpendicular vector 
+        # subtract the component parallel to p to create a perpendicular vector 
     n1 -= np.dot(n1,p)*p
-    # normalise to make it a unit vector
+        # normalise to make it a unit vector
     n1 = n1/np.sqrt(np.dot(n1,n1))
     # make a second vector n2 that is perpendicular to both p and n1
     n2 = np.cross(p,n1)
@@ -273,8 +299,9 @@ def isogeniccontour(wpl, waz, sin_al):
     for th in np.linspace(0, 2*np.pi, 1000):
         ns.append(sin_al*p+cos_al*(np.cos(th)*n1+np.sin(th)*n2))
     ns = np.array(ns)
-    #print(np.sqrt(ns[:,0]**2+ns[:,1]**2+ ns[:,2]**2)) # checks if they are unit vectors
-    # convert ns to azumuth/plunge (strike/dip) so they can be plotted on a stereonet
+    # check if they are unit vectors
+    #print(np.sqrt(ns[:,0]**2+ns[:,1]**2+ ns[:,2]**2)) 
+    # convert ns to azumuth/plunge (strike/dip) for plotting on stereonet
     strike, dip = mplstereonet.vector2pole(ns[:,0], ns[:,1], ns[:,2])
     return strike,dip
 
@@ -282,12 +309,12 @@ def isogeniccontour(wpl, waz, sin_al):
 # ====================
 # Geomechanical Models
 # ====================
-'''
+'''In progress, refer to demo-presentation/functions.py
 
 '''
 # ====================
 # 3DMohr Plot Analysis
 # ====================
-'''
+'''In progress, refer to demo-presentation/functions.py
 
 '''
