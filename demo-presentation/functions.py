@@ -1,5 +1,6 @@
 # Functions for use in these notebooks
 import numpy as np
+import math
 import pandas as pd
 from scipy import integrate
 from matplotlib import pyplot as plt

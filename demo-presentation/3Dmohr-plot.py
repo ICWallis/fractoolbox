@@ -39,7 +39,9 @@ for df in [dffracs]:
     df['alpha'] = -60 
     df['beta'] = -90 # -90 is the origional and -60 is the tilted
     df['gamma'] = 0 
-    df['Sv_eff'] = df.Sv - df.Pp 
+    df['Sv_eff'] = df.Sv - df.Pp
+    df['SHmax_eff'] = df.SHmax - df.Pp
+    df['Shmin_eff'] = df.Shmin - df.Pp 
     # so I am using effective vertical stress rather than vertical stress without changing the functions
     # Sv in the fucntion list below is just used to normalise... perhaps I should change the name?
     # compile my data into a tuple that can be used in the function using the following sequence (S1,S2,S3,Pp,Sv,alpha,beta,gamma,strike,dip)
@@ -139,24 +141,9 @@ def FractureSnTau(S1,S2,S3,Pp,Sv,alpha,beta,gamma,strike,dip):
 # CALCULATE SHEAR AND NORMAL STRESS
 # ---------------------------------
 # Calls the method above to calculate the shear and normal stress for each fracture
-# Use one if the loops below and comment out the other
+# method is set up to loop over multiple df when required
 
-# Loop for when there is one dataframe
-# ------------------------------------
-# eg the synthetic fracture dataframe
-'''
-dalist = []
-for  S1,S2,S3,Pp,Sv,alpha,beta,gamma,strike,dip in df['fracture']:
-    Sn, tau = FractureSnTau(S1,S2,S3,Pp,Sv,alpha,beta,gamma,strike,dip)
-    dalist.append([Sn, tau])
-x = pd.Series(dalist)
-df['Sn_tau'] = x.values
-'''
-# Loop for when there are multiple dataframes
-# -------------------------------------------
-# eg the NM10 dataset filtered by lithology
-
-for df in [dfconductivehalo,dfconductivenonhalo,dffaults,dfresistive,dfiso_0pnt9,dfiso_0pnt4,dfiso_0pnt3,dfiso_0pnt2,dfiso_0pnt1]:
+for df in [dffracs]:
     dalist = []
     for  S1,S2,S3,Pp,Sv,alpha,beta,gamma,strike,dip in df['fracture']:
         Sn, tau = FractureSnTau(S1,S2,S3,Pp,Sv,alpha,beta,gamma,strike,dip)
@@ -164,27 +151,13 @@ for df in [dfconductivehalo,dfconductivenonhalo,dffaults,dfresistive,dfiso_0pnt9
     x = pd.Series(dalist)
     df['Sn_tau'] = x.values
 
+
 # ---------------------------------------------
 # CALCULATE THE RATIO OF SHEAR TO NORMAL STRESS
 # ---------------------------------------------
-# Use one if the loops below and comment out the other
+# method is set up to loop over multiple df
 
-# Loop for when there is one dataframe
-# ------------------------------------
-# eg the synthetic fracture dataframe
-'''
-dalist = []
-for Sn, tau, in df['Sn_tau']:
-    ratio = tau/Sn
-    dalist.append(ratio)
-x = pd.Series(dalist)
-df['ratio'] = x.values
-'''
-# Loop for when there is one dataframe
-# ------------------------------------
-# eg the synthetic fracture dataframe
-
-for df in [dfconductivehalo,dfconductivenonhalo,dffaults,dfresistive,dfiso_0pnt9,dfiso_0pnt4,dfiso_0pnt3,dfiso_0pnt2,dfiso_0pnt1]:
+for df in [dffracs]:
     dalist = []
     for Sn, tau, in df['Sn_tau']:
         ratio = tau/Sn
@@ -192,45 +165,29 @@ for df in [dfconductivehalo,dfconductivenonhalo,dffaults,dfresistive,dfiso_0pnt9
     x = pd.Series(dalist)
     df['ratio'] = x.values
 
-# Investigation or filter the ratios
-# ----------------------------------
-#print(dfsed['ratio'])
-
-# Make a histogram of the ratio
-#n, bins, patches = plt.hist(dfand['ratio'],50,density=True,facecolor = 'g', alpha=0.75) 
-
-# Make a new dataframe containing those fractures above a set value
-#dfandPnt5 = dfand.loc[dfand.ratio > 0.5, :] 
+print(dffracs)
+ 
 
 # GENERATE MOHR PLOT OUTLINE
 # --------------------------
 # perhaps the problem is because i am taking absolute magnatudes rather than the magnatudes in geographic cooridnates?
 # because in geographic coordinates, I lose a bit in the rotation?
 
-# calling the shallowest (smallest) stress values
-# -----------------------------------------------
-# for ease today, I read these values straight from the dfs in the data processing ipynb
-# these convert the stresses to effective stresses 
+# calling the shallowest (smallest) effective stress values
+# ---------------------------------------------------------
 
-### NOTE ### CHECK ### NOTE ### UPDATE ### NOTE ###
-### NOTE ### CHECK ### NOTE ### UPDATE ### NOTE ###
-### NOTE ### CHECK ### NOTE ### UPDATE ### NOTE ###
-
-PoreP = 16.06
-print(Pp)
-
-# Min Sv value
-Sigma1 = 38.90 - PoreP 
+# Min Sv value (use effective stress)
+Sigma1 = dffracs['Sv_eff'].min()
 print(Sigma1)
 
 # Min SHmax value
-Sigma2 = 31.14  - PoreP
+Sigma2 = dffracs['SHmax_eff'].min()
 print(Sigma2)
 
 # Min Shmin value
-Sigma3 = 23.38 - PoreP
+Sigma3 = dffracs['Shmin_eff'].min()
 print(Sigma3)
-
+asdf
 # call the function that makes all of the components for the mohr plot
 # remeber that the last object passed into this is the normalisation value
 tauS, normS, meanS = sts.fMohr3DSvnorm(Sigma1,Sigma2,Sigma3,Sigma1) 
