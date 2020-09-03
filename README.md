@@ -17,7 +17,7 @@ If you're new to python, download the 'Python for Geoscientists' course from [he
 
 We recommend starting by downloading [Anaconda](https://www.anaconda.com/) to manage Python and Juypter Notebook installation because it comes with many of packages/libraries required by fractoolbox already baked in. 
 
-Note that fractoolbox is made for Python 3.x
+Note that fractoolbox is made with Python 3.6
 
 There are two libraries used in fractoolbox that do not come standard with the Annaconda build. Once you you have installed Annaconda, these libraries may be installed using _anaconda prompt_ by typing:
 
@@ -33,7 +33,13 @@ Due to compatibility with resent versions of matplotlib, ensure you have mplster
 
 When mplstereonet is used after seaborn, there may be an issue with mplstereonet drawing plot elements like the grid. If this occurs, use sns.reset_defaults() just prior to building a stereonet with mplstereonet. 
 
-Now you're set up, use the green 'Code' button on this page to download a copy of this git repository. Unzip and have fun exploring your own fracture data. 
+Now you're set up, use the green 'Code' button on this page to download a copy of this git repository. Unzip and have fun exploring your own fracture data.
+
+The 'fractoolbox' folder needs to be in the same folder as your code when you call
+
+> import fractoolbox as ftb
+
+The fractoolbox module has not yet been deployed as a package so can not be installed using pip or conda. 
 
 ### License
 
