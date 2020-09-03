@@ -3,6 +3,9 @@
 #node_modules/
 .ipynb_checkpoints
 .pyc
+.vscode/
+*__pycache__/
+
 #someOtherfoler/
 
 # Data
