@@ -1,1 +1,0 @@
-A finite element mass and heat transfer model (AU-PyTOUGH2) of a the transient thermodynamic conditions inside a dilatational jog. The model seeks to reveal the thermodynamic evolution after flash boiling occurs in response to fault rupture. This model has application to understanding gold deposition processes in the epithermal environment.  
