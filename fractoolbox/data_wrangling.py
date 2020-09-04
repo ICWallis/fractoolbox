@@ -157,7 +157,7 @@ def xyzinterp(mDdat, mDsur, xsur, ysur, zsur):
         zsur = dfsurvey['plunge']
 
         dfxyz = ftb.xyzinterp(mDdat, mDsur, xsur, ysur, zsur) 
-        dfxyz.columns = ['Dpth_mMDRT','Northing','Easting','wellplunge']
+        dfxyz.columns = ['Dpth_mMDRT','Easting','Northing','wellplunge']
     
         # combine calculated values into fracture dataframe
         dffracture = pd.concat([dffracture,dfxyz1], axis=1, join='inner')
