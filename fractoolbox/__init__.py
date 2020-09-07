@@ -1,6 +1,7 @@
 from .data_wrangling import dip2strike
 from .data_wrangling import strike2dipaz
 from .data_wrangling import xyzinterp
+from .data_wrangling import linear_interpolate_2dp
 
 from .geometric_bias import unitvectorx
 from .geometric_bias import unitvectory
@@ -33,7 +34,8 @@ __version__ = '0.1-dev'
 __all__ = [
     'dip2strike',       # data_wrangling
     'strike2dipaz',
-    'xyzinterp', 
+    'xyzinterp',
+    'linear_interpolate_2dp', 
     'unitvectorx',      # geometric_bias
     'unitvectory',
     'unitvectory',

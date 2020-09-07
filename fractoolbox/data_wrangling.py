@@ -192,5 +192,17 @@ def xyzinterp(mDdat, mDsur, xsur, ysur, zsur):
     return dfout
 
 
+def linear_interpolate_2dp(depth, datadepth, data):
+    '''
+    For given depths, interpolate an array of values (to 2 decimal places) from and existing depth/data array
+    
+    Example of usage with Pandas
+    depth = dffracture['DEPT']
+    datadepth = dfsurvey['Depth_mMD']
+    data = dfsurvey['plunge']
+    dffracture['WellPlunge'] = linear_interpolate(depth, datadepth, data)
+    '''
+    values = np.around((np.interp(depth, datadepth, data)),2)
+    return values
 
 
