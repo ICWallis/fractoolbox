@@ -1,7 +1,6 @@
 name: frac
 channels:
   - defaults
-  - conda forge
 dependencies:
   - python=3.7.7
   - pip:
@@ -12,5 +11,6 @@ dependencies:
     - scipy==1.5.2
     - seaborn==0.10.1
     - watermark==2.0.2
+    - pip
 prefix: /Users/irene/opt/anaconda3/envs/frac
 
