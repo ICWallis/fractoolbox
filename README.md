@@ -18,11 +18,11 @@ The Juypter Notebooks in fractoolbox can be viewed as static pages in your brows
 
 If you're new to python, download the 'Python for Geoscientists' course from [here](https://github.com/ddempsey/python_for_geoscientists) because it includes a quick-start guide and will set you on the pythonic path.  
 
-We recommend using [Anaconda](https://www.anaconda.com/) to manage Python packages and the Juypter Notebook installation because it comes with many of packages/libraries required by fractoolbox and is a simple way to get started. 
+We recommend using [Anaconda](https://www.anaconda.com/) to manage Python packages and the Juypter Notebook installation. It comes with many of packages/libraries required by fractoolbox and is a simple way to get started. 
 
 fractoolbox is made with Python 3.6
 
-There are two libraries used in fractoolbox that do not come standard with the Annaconda build. Once you you have installed Annaconda, these libraries may be installed using _anaconda prompt_ by typing:
+There are two libraries used in fractoolbox that are not already built into Annaconda. Once you you have installed Annaconda, these libraries may be installed using _anaconda prompt_ by typing:
 
 > $ pip install mplstereonet
 
@@ -36,13 +36,13 @@ Due to compatibility with resent versions of matplotlib, ensure you have mplster
 
 When mplstereonet is used after seaborn, there may be an issue with mplstereonet drawing plot elements like the grid. If this occurs, use sns.reset_defaults() just prior to building a stereonet with mplstereonet. 
 
-Now you're set up, use the green 'Code' button on this page to download a copy of this git repository. Unzip and have fun exploring your own fracture data.
+Now you're set up, use the green 'Code' button on this page to download a copy of this repository. Unzip and have fun exploring your own fracture data.
 
-The 'fractoolbox' folder needs to be in the same folder as your code when you call
+The 'fractoolbox' folder needs to be in the same folder as your code when you call it with...
 
 > import fractoolbox as ftb
 
-The fractoolbox module has not yet been deployed as a package so can not be installed using pip or conda. 
+The fractoolbox module has not yet been deployed as a package so it can't be installed using pip or conda. 
 
 ### License
 
