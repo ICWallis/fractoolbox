@@ -20,25 +20,28 @@ https://choosealicense.com/licenses/apache-2.0/
 import numpy as np
 from scipy import integrate
 
-def linSv_3(maxdepth,obsdepth,density):
-    '''Magnitude of overburden stress [Sv in MPa] at a given observation depth
+def overburden(maxdepth,obsdepth,density):
+    """Magnitude of overburden stress [Sv in MPa] at a given observation depth
 
-    Simple intergration model using single density that returns a
-    vertical stress vaule for the observation depth which is passed in.
+    Simple integration model that uses single average density and 
+    returns Sv for the observation depth or list of depths.
 
     Args:
-        maxdepth: the maximum depth of the stress model [m]
-        obsdepth = depth(s) where Sv will be returned [m]
-        obsdepth can be a single value, a list or a Pandas dataframe coloumn
-        density = average rock density [kg/m3] which is typically 2200 - 2800
+        maxdepth (float): The maximum depth of the stress model [m]
+        obsdepth (float or list of floats): Depth(s) where Sv will be returned [m]
+        density (float): average rock density [kg/m3] which is typically 2200 - 2800
 
     Returns:
-        Sv_obsdepth: Vertical stress aka overburden [MPa]     
-    '''
+        (float or list of floats): Sv at obsdepth [MPa]
+    """
     depth_model = np.array([0,maxdepth])
     density_model = np.array([density,density])
     gravity = 9.8
+    
     # trapezoid integration with unit conversion from Pa to MPa
     Sv_model = (integrate.cumtrapz(density_model * gravity, depth_model, initial=0)) * 1.e-6 
+    
+    # linear interpolation from the Sv model
     Sv_obsdepth = np.around((np.interp(obsdepth, depth_model, Sv_model)),2)
+    
     return Sv_obsdepth
