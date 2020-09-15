@@ -10,7 +10,7 @@ A series of Jupter Notebooks are included in the directory _published-case-study
 
 >Wallis, I.C., Rowland, J. V. and Dempsey, D. E., Allan, G., Sidik, R., Martikno, R., McLean, K., Sihotang, M., Azis, M. and Baroek, M. 2020 (submitted) Approaches to imaging feedzone diversity with case studies from Sumatra, Indonesia, and the Taupō Volcanic Zone, New Zealand. New Zealand Geothermal Workshop: Waitangi, New Zealand.
 
-The Juypter Notebooks in fractoolbox can be viewed as static pages in your browser window by clicking on them here. Alternatively, they may be explored in the interactive environment of mybinder.org by clicking on the button below. Binder allows you to edit the code in the cells and re-run the notebook to generate a new output, all without installing anything on your computer. Because fractoolbox is regularly changing, the binder instance may take a few minutes to load. 
+The Juypter Notebooks in fractoolbox can be viewed as static pages in your browser window by clicking on them here. Alternatively, they may be explored in the interactive environment of mybinder.org by clicking on the button below. Binder allows you to edit the code and re-run the notebook to generate a new output, all without downloading or installing anything on your computer. Because fractoolbox is regularly changing, the binder instance may take a few minutes to load. 
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ICWallis/fractoolbox/master)
 
