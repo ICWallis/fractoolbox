@@ -18,9 +18,9 @@ The Juypter Notebooks in fractoolbox can be viewed as static pages in your brows
 
 If you're new to python, download the 'Python for Geoscientists' course from [here](https://github.com/ddempsey/python_for_geoscientists) because it includes a quick-start guide and will set you on the pythonic path.  
 
-We recommend starting by downloading [Anaconda](https://www.anaconda.com/) to manage Python and Juypter Notebook installation because it comes with many of packages/libraries required by fractoolbox already baked in. 
+We recommend using [Anaconda](https://www.anaconda.com/) to manage Python packages and the Juypter Notebook installation because it comes with many of packages/libraries required by fractoolbox and is a simple way to get started. 
 
-Note that fractoolbox is made with Python 3.6
+fractoolbox is made with Python 3.6
 
 There are two libraries used in fractoolbox that do not come standard with the Annaconda build. Once you you have installed Annaconda, these libraries may be installed using _anaconda prompt_ by typing:
 
