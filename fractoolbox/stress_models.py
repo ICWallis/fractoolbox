@@ -1,43 +1,44 @@
-# ====================
-# Stress Models
-# ====================
-'''In progress
+# ========================
+# Stress Tensor Estimation
+# ========================
+'''
 
+
+Contributions
+-------------
+fractoolbox was initiated by Irene Wallis https://github.com/ICWallis/fractoolbox
+as part of Doctoral Research at the University of Auckland that is 
+supervised by David Dempsey https://github.com/ddempsey and 
+Julie (JR) Rowland, with math/code contributions from Evert Durán 
+https://github.com/edur409.
+
+Licence 
+-------
+fractoolbox is distributed under an Apache 2.0 licence
+https://choosealicense.com/licenses/apache-2.0/
 '''
 import numpy as np
-import math
-import pandas as pd
 from scipy import integrate
-from matplotlib import pyplot as plt
 
-def linSv(mdepth,obsdepth,dens):
+def linSv_3(maxdepth,obsdepth,density):
     '''Magnitude of overburden stress [Sv in MPa] at a given observation depth
 
-    Integrates a single density with depth and then returns the a value
-    from the curve at a desired depth of observation
+    Simple intergration model using single density that returns a
+    vertical stress vaule for the observation depth which is passed in.
 
     Args:
-        mdepth = bottom depth of the stress model in m
-        obsdepth = the depths where Sv will be returned in m
-        dens = rock density used in the model kg/m3
-        this function assumes a single density with depth
+        maxdepth: the maximum depth of the stress model [m]
+        obsdepth = depth(s) where Sv will be returned [m]
+        obsdepth can be a single value, a list or a Pandas dataframe coloumn
+        density = average rock density [kg/m3] which is typically 2200 - 2800
 
     Returns:
-        Sv: Vertical stress     
+        Sv_obsdepth: Vertical stress aka overburden [MPa]     
     '''
-    df=pd.DataFrame()                       # make a dataframe for the model
-    df['depth'] = np.linspace(0,mdepth,100) # top and base depth of model
-    df['dens'] = np.linspace(dens,dens,100)
-    d = df['dens']                          # trapezoid integration
-    g = 9.8            # gravity
-    z = df['depth']
-    x = z
-    y = d*g   
-    y_int = integrate.cumtrapz(y, x, initial=0)
-    y_int_MPa_cons = y_int*1.e-6
-    df['SvMPa'] = y_int_MPa_cons            # add Sv model dataframe for use later
-    mDdata = obsdepth                       # grab the desired observation depth value
-    mDsurvey = np.asarray(df['depth'].tolist())
-    xsurvey = np.asarray(df['SvMPa'].tolist())
-    Sv = np.around((np.interp(mDdata, mDsurvey, xsurvey)),2)
-    return Sv
+    depth_model = np.array([0,maxdepth])
+    density_model = np.array([density,density])
+    gravity = 9.8
+    # trapezoid integration with unit conversion from Pa to MPa
+    Sv_model = (integrate.cumtrapz(density_model * gravity, depth_model, initial=0)) * 1.e-6 
+    Sv_obsdepth = np.around((np.interp(obsdepth, depth_model, Sv_model)),2)
+    return Sv_obsdepth
