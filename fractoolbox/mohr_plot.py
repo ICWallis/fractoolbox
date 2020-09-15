@@ -1,8 +1,10 @@
-# ====================
-# 3DMohr Plot Analysis
-# ====================
-'''In progress, refer to demo-presentation/functions.py
-
+# ==============
+# # 3D Mohr Plot
+# ==============
+'''
+A set of functions that draw the 3D Mohr plot for a given stress tensor
+or ratio between the components of the stress tensor (ie normalised to
+the vertical stress or effective vertical stress.
 '''
 
 def sigma_m(bigS,smallS):

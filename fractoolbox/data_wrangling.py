@@ -30,7 +30,7 @@ used under the right-hand rule convention.
 
 Contributions
 -------------
-Initiated by Irene Wallis https://github.com/ICWallis/fractoolbox
+fractoolbox was initiated by Irene Wallis https://github.com/ICWallis/fractoolbox
 as part of Doctoral Research at the University of Auckland that is 
 supervised by David Dempsey https://github.com/ddempsey and 
 Julie (JR) Rowland, with math/code contributions from Evert Durán 

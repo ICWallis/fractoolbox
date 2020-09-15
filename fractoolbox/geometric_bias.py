@@ -45,6 +45,19 @@ logs acquired in seven high-temperature geothermal wells.
 Refer to geometric-sample-bias.ipynb for an illustration of the 
 alpha angles, code examples using the functions, and plots that show
 the impact of the blind zone on a range of well data. 
+
+Contributions
+-------------
+fractoolbox was initiated by Irene Wallis https://github.com/ICWallis/fractoolbox
+as part of Doctoral Research at the University of Auckland that is 
+supervised by David Dempsey https://github.com/ddempsey and 
+Julie (JR) Rowland, with math/code contributions from Evert Durán 
+https://github.com/edur409.
+
+Licence 
+-------
+fractoolbox is distributed under an Apache 2.0 licence
+https://choosealicense.com/licenses/apache-2.0/
 '''
 
 import numpy as np

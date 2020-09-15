@@ -1,3 +1,38 @@
+# =================================================================
+# Kirsh (1898) Equations for Stress Resolved onto a Circular Cavity
+# =================================================================
+'''
+The Kirsh equations describe effective stresses around a wellbore in 
+cylindrical coordinates for a vertical well and are used when the 
+borehole axis = Sv. These can be used to explore the impact horizontal stress,
+pore pressure and thermal stress have on the formation of drilling induced
+borehole damage (i.e., borehole breakout and drilling induced tensile fractures).
+
+Kirsch, 1898, Die theorie der elastizität und die bedürfnisse der festigkeitslehre: 
+Zeitschrift des Vereines deutscher Ingenieure, v. 42, p. 797–807.
+
+The functions in this notebook are the form of the equations as presented 
+Jaeger et al (2007) and Zoback (2010). 
+
+Jaeger, J. C., 2007, Fundamentals of rock mechanics, Malden, MA, Malden, 
+MA : Blackwell Pub. 2007.
+
+Zoback, M. D., 2010, Reservoir Geomechanics, Cambridge University Press.
+
+Contributions
+-------------
+fractoolbox was initiated by Irene Wallis https://github.com/ICWallis/fractoolbox
+as part of Doctoral Research at the University of Auckland that is 
+supervised by David Dempsey https://github.com/ddempsey and 
+Julie (JR) Rowland, with math/code contributions from Evert Durán 
+https://github.com/edur409.
+
+Licence 
+-------
+fractoolbox is distributed under an Apache 2.0 licence
+https://choosealicense.com/licenses/apache-2.0/
+'''
+
 
 def thermal_stress(therex, K, nu, Tres, Twell):
     '''Thermally induced stess [MPa] assuming a steady state has been reached.
@@ -17,7 +52,7 @@ def thermal_stress(therex, K, nu, Tres, Twell):
     Returns: 
         sigma_Dt: Thermally induced stress
     
-    Written by Irene using eq7.150  P204 Jager et al 2007
+    Function written by Irene using eq7.150  P204 Jager et al 2007
     
     '''
     sigma_Dt = (
@@ -67,7 +102,7 @@ def effhoopstress(SHmax, Shmin, Pp, Pmud, sigma_Dt, R, r, theta):
     Returns:
         sigma_tt: A list effective hoop stress at azimuths specified by theta (sigma tau tau)
 
-    Written by Evert using Kirsh (1898) as presented in Jager et al. (2007) and Zoback (2010)
+    Function written by Evert using Kirsh (1898) as presented in Jager et al. (2007) and Zoback (2010)
     
     '''
     sigma_tt = (
