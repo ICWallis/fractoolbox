@@ -1,4 +1,4 @@
-name: frac
+name: frac_env
 channels:
   - defaults
 dependencies:
