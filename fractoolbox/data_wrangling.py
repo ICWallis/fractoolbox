@@ -2,65 +2,6 @@
 # fractoolbox Function Library
 # ============================
 '''
-Python tools for structural geology and borehole image analysis that includes 
-data handling, frequency and geometric analysis, and reservoir geomechanics.
-
-Content
--------
-Library content by section (and status)
--   Data Handling (in progress)
--   Geometric Sample Bias: Isogenic Contours (in progress)
--   Geomechanical Models (to come)
--   3DMohr Plot Analysis (to come)
-
-Contributions
--------------
-Initiated by Irene Wallis https://github.com/ICWallis/fractoolbox
-as part of Doctoral Research at the University of Auckland that is 
-supervised by David Dempsey https://github.com/ddempsey and 
-Julie (JR) Rowland, with math/code contributions from Evert Durán 
-https://github.com/edur409.
-
-Citations
----------
-Barton, C. A., Zoback, M. D., and Moos, D., 1995, Fluid flow along 
-    potentially active faults in crystalline rock: Geology, v. 23, 
-    p. 683-686.
-
-Peška, P., and Zoback, M. D., 1995, Compressive and tensile failure 
-    of inclined well bores and determination of in situ stress and 
-    rock strength: Journal of Geophysical Research: Solid Earth, 
-    v. 100, no. B7, p. 12791-12811.
-
-Priest, S., 1993, Discontinuity Analysis for Rock Engineering, 
-    Netherlands, Springer.
-
-Terzaghi, R. D., 1965, Sources of error in joint surveys: Geotechnique, 
-    v. 15, no. 3, p. 287-304.
-
-Wallis, I.C., Rowland, J. V. and Dempsey, D. E., Allan, G., Sidik, R., 
-    Martikno, R., McLean, K., Sihotang, M., Azis, M. and Baroek, M. 
-    2020 (submitted) Approaches to imaging feedzone diversity with 
-    case studies from Sumatra, Indonesia, and the Taupō Volcanic Zone, 
-    New Zealand. New Zealand Geothermal Workshop: Waitangi, New Zealand.
-
-Zoback, M. D., 2010, Reservoir Geomechanics, Cambridge University Presss
-
-Licence 
--------
-fractoolbox is distributed under an Apache 2.0 licence
-
-https://choosealicense.com/licenses/apache-2.0/
-
-'''
-import numpy as np
-import mplstereonet
-import pandas as pd
-
-# =============
-# Data Handling
-# =============
-'''
 Tools to convert between the various ways fracture geometry are described
 
 Structural Data Format Examples 
@@ -86,7 +27,23 @@ The Right-Hand Rule
 Place your right hand on the fracture plane with fingers pointed down
 the direction of dip. Your thumb points to the strike azimuth which is
 used under the right-hand rule convention. 
+
+Contributions
+-------------
+Initiated by Irene Wallis https://github.com/ICWallis/fractoolbox
+as part of Doctoral Research at the University of Auckland that is 
+supervised by David Dempsey https://github.com/ddempsey and 
+Julie (JR) Rowland, with math/code contributions from Evert Durán 
+https://github.com/edur409.
+
+Licence 
+-------
+fractoolbox is distributed under an Apache 2.0 licence
+https://choosealicense.com/licenses/apache-2.0/
 '''
+import numpy as np
+import mplstereonet
+import pandas as pd
 
 def dip2strike(dipaz):
     '''Convert dip-dipazimuth data to strike using the right-hand rule
