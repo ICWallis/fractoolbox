@@ -30,9 +30,10 @@ def overburden(maxdepth,obsdepth,density):
         maxdepth (float): The maximum depth of the stress model [m]
         obsdepth (float or list of floats): Depth(s) where Sv will be returned [m]
         density (float): average rock density [kg/m3] which is typically 2200 - 2800
+        All args accept float or interger values
 
     Returns:
-        (float or list of floats): Sv at obsdepth [MPa]
+        Sv at obsdepth [MPa] as float or list of floats
     """
     depth_model = np.array([0,maxdepth])
     density_model = np.array([density,density])
