@@ -23,7 +23,7 @@ from .transform_stress_tensor import rake
 from .transform_stress_tensor import Rt
 from .transform_stress_tensor import fracture_sn_tau
 
-from .stress_models import linSv
+from .stress_models import linear_Sv
 
 from .stress_polygon import minstress
 from .stress_polygon import maxstress

@@ -20,7 +20,7 @@ https://choosealicense.com/licenses/apache-2.0/
 import numpy as np
 from scipy import integrate
 
-def overburden(maxdepth,obsdepth,density):
+def linear_Sv(maxdepth,obsdepth,density):
     """Magnitude of overburden stress [Sv in MPa] at a given observation depth
 
     Simple integration model that uses single average density and 
