@@ -41,71 +41,69 @@ Licence
 fractoolbox is distributed under an Apache 2.0 licence
 https://choosealicense.com/licenses/apache-2.0/
 '''
+
 import numpy as np
 import mplstereonet
 import pandas as pd
 
 def dip2strike(dipaz):
-    '''Convert dip-dipazimuth data to strike using the right-hand rule
+    """Convert dip-dipazimuth data to strike using the right-hand rule
 
     Args:
-        dipaz: Azimuth of dip in degrees from north
-    
-    Returns: 
-        Strike azimuth (0-360 degrees) based on the right hand rule
- 
-    '''
+        dipaz (float): Azimuth of dip in degrees from north
+
+    Returns:
+        float: Strike azimuth (0-360 degrees) based on the right hand rule
+    """
     if dipaz < 90:
-        strike=(dipaz-90)+360
+        strike = (dipaz - 90) + 360
     else:
-        strike=dipaz-90
+        strike = dipaz - 90
     return strike
 
 
 def strike2dipaz(strike):
-    '''Convert strike to dip azimuth using the right-hand rule convention
+    """Convert strike to dip azimuth using the right-hand rule convention
 
     Args:
-        strike: Strike azimuth in degrees from north 
-            where the right-hand rule is observed
- 
-    Returns
-        Azimuth of the dip direction (0-360 degrees)
-    
-    '''
+        strike (float): Strike azimuth in degrees from north
+
+    Returns:
+        float: Azimuth of the dip direction (0-360 degrees)
+    """
     if strike > 270:
-        dipaz=(strike+90)-360
+        dipaz = (strike + 90) - 360
     else:
-        dipaz=strike+90
+        dipaz = strike + 90
     return dipaz
 
 def xyzinterp(mDdat, mDsur, xsur, ysur, zsur):
-    '''Interpolates xyz for a point on the well path
+    """Interpolates xyz for a point on the well path
     
-    Interpolation uses well survey data files and
-    z can be replaced with any other attribute.
-    Measured depth is the common value between the well survey data 
-    and data that is receiving values (typically a dataframe of fractures)
+    Interpolation finds an xyz point on a line defined by an existing xy and measured depth
+    z can be depth or any other float attribute (e.g., resistivity)
+    Measured depth is the common value between the interpolation point and the line 
+    Method was designed for adding xyz to a Pandas dataframe of fractures
 
     Args:
-        xyzinterp expects input objects to be columns from Pandas dataframes
-        Ensure all data has the same datum (typically rig floor for well data)
+        xyzinterp expects input objects to be columns from a Pandas dataframe
+        Ensure all depth data has the same datum (typically rig floor for well data)
 
-        mDdat: Meters along the well path of the data
-        mDsur: Meters along the well path from the survey file
-        xsur: Easting location from the survey file in whatever co-ordinate system 
-        ysur: Northing location from the survey file in whatever co-ordinate system
-        zsur: Vertical depth in total vertical depth (will not work with elevation data)
-            or any other columns in the survey dataframe (e.g. plunge or azimuth)
+        mDdat (float): Meters measured depth along the well path of the data point
+        mDsur (float): Meters measured depth along the line (well path from a directional survey file)
+        xsur (float): Easting location from the survey file in whatever co-ordinate system 
+        ysur (float): Northing location from the survey file in whatever co-ordinate system
+        zsur (float): Total vertical depth (or other data such as well plunge or azimuth) 
+            assocated at the location defined by xsur and ysur. Will not work with z = elevation data, 
+            so use 'datum - vertical depth' to find elevation of the point
 
     Returns:
-        A dataframe with the mD, x, y, and z at the depth MD
-        where z can be any data type
+        A dataframe with the mD (float), x (float), y (float), and z (float) at the point defined by mDdat
     
     Usage example:
         # append well plunge to fracture dataframe
-        # dffracture: a pandas dataframe with fractures
-        # dfsurvey: a pandas dataframe with well survey data 
+        # dffracture: a Pandas dataframe with fractures
+        # dfsurvey: a Pandas dataframe with well survey data 
     
         mDdat = dffracture['depth_mMDRF']
         mDsur = dfsurvey['depth_mMDRF']
@@ -119,7 +117,7 @@ def xyzinterp(mDdat, mDsur, xsur, ysur, zsur):
         # combine calculated values into fracture dataframe
         dffracture = pd.concat([dffracture,dfxyz1], axis=1, join='inner')
     
-    '''
+    """
     dfout = pd.DataFrame()
     dfout['MD'] = mDdat
     dfout['x'] = np.around(
@@ -149,17 +147,25 @@ def xyzinterp(mDdat, mDsur, xsur, ysur, zsur):
     return dfout
 
 
-def linear_interpolate_2dp(depth, datadepth, data):
-    '''
-    For given depths, interpolate an array of values (to 2 decimal places) from and existing depth/data array
+def linear_interpolate_2dp(depth, data, newdatadepth):
+    """Interpolate data values (to 2 dp) for given depth(s) from and existing depth/data array
+
+    Args:
+        depth (float): List of depths for the 'data'
+        data (float): List of data associated with 'depth'
+        newdatadepth (float): List of depths that will be used to interpolate new data
+
+    Returns:
+        float: Data at the point defined by datadepth
     
-    Example of usage with Pandas
-    depth = dffracture['DEPT']
-    datadepth = dfsurvey['Depth_mMD']
-    data = dfsurvey['plunge']
-    dffracture['WellPlunge'] = linear_interpolate(depth, datadepth, data)
-    '''
+    Usage example:
+        Values are columns in a Pandas dataframe
+        Ensure all depths are from the same dataum (typically rig floor)
+    
+        depth = dffracture['DEPT']
+        datadepth = dfsurvey['Depth_mMD']
+        data = dfsurvey['plunge']
+        dffracture['WellPlunge'] = linear_interpolate(depth, datadepth, data)
+    """
     values = np.around((np.interp(depth, datadepth, data)),2)
     return values
-
-
