@@ -2,6 +2,8 @@
 
 Python tools for structural geology, borehole image analysis, and reservoir geomechanics.
 
+Info about what it does (and the functions)
+
 ### Using the Fractoolbox
 
 The fractoolbox has not yet been deployed as a package so it can't be installed using pip or conda. 
