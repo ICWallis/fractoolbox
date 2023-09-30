@@ -1,7 +1,5 @@
-from .data_wrangling import dip2strike
-from .data_wrangling import strike2dipaz
-from .data_wrangling import xyzinterp
-from .data_wrangling import linear_interpolate_2dp
+from .conversion import dip2strike
+from .conversion import strike2dipaz
 
 from .geometric_bias import unitvectorx
 from .geometric_bias import unitvectory
