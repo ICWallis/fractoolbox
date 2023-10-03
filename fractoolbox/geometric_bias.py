@@ -2,18 +2,15 @@
 # Geometric Sample Bias: Isogenic Contours
 # ========================================
 '''
-Seminal work by Terzaghi (1965) revealed a geometric bias generated 
-by sampling a three-dimensional fracture network with a line. 
-Simply put, fractures planes that are perpendicular to the line are 
-very likely to be intersected whereas those parallel to the line are 
-almost never intersected. This geometric sample bias generates a 'blind
-zone' in fracture datasets where those which are near-parallel to the
-scan-line or well-path are rarely sampled. This blind zone is 
-sometimes also referred to as the 'well shadow'.
+Seminal work by Terzaghi (1965) revealed a geometric bias is generated 
+by sampling a three-dimensional fracture network with a line (well path or scan-line). 
+Fracture planes perpendicular to the line are likely to be intersected while 
+those parallel to the line are rarely intersected. This geometric sample bias 
+generates a 'blind zone' where fractures near-parallel to the line are missing.
 
 Terzaghi (1965) proposed a methodology quantifies the geometric sample 
 bias using the acute angle (alpha) between the fracture plane and 
-the line. Visualising the blind zone (where sin(alpha) +/- 0.3) and 
+the line. Visualizing the blind zone (where sin(alpha) +/- 0.3) and 
 contours of sample bias (isogenic contours) on a stereonet enables
 us to visually evaluate the degree that geometric sample bias in 
 affects a fracture dataset.  
@@ -25,7 +22,7 @@ analysis and some form of the Terzaghi correction comes baked into
 most log analysis software. However, there are two key issues with these
 corrections:
 
--   Correction may mislead interpretation by emphasising solitary 
+-   Correction may mislead interpretation by emphasizing solitary 
     fractures that are not part of some significant but under-sampled 
     population, especially where the weighting factor approaches 
     infinity near sin α = 0. Priest (1993) recommends resolving this 
