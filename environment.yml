@@ -12,5 +12,3 @@ dependencies:
     - scipy==1.5.2
     - seaborn==0.10.1
     - watermark==2.0.2
-prefix: /Users/irene/opt/anaconda3/envs/frac
-
