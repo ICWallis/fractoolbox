@@ -13,7 +13,7 @@ def Rs(alpha,beta,gamma):
     Input Euler angles alpha, beta, gamma in degrees
     Defining the stress field in Euler angles...
     If S1 is vertical (normal faulting) then:
-        alpha = the trend of SHmax - pi/2 (aka the azumuth in degrees minus 90 degrees)
+        alpha = the trend of SHmax - pi/2 (aka the azimuth in degrees minus 90 degrees)
         beta = the -ve trend of Sv (aka -90 for vertical stress)
         gamma = 0.
     If S1 is horizontal (strike slip or reverse faulting) then:
@@ -21,7 +21,7 @@ def Rs(alpha,beta,gamma):
         beta = -ve plunge of S1
         gamma = rake of S2
     Output is an array.
-    Function is called by fSg that makes the matrix multiplcation to do the transformation
+    Function is called by fSg that makes the matrix multiplication to do the transformation
     Method from appendix in Peska and Zoback (1995)
     '''
     alpha = math.radians(alpha)
@@ -41,11 +41,11 @@ def Rs(alpha,beta,gamma):
     return Rs 
 
 def Rf(strike,dip):
-    '''Generates an array for that's used to transofrm (rotate) the stress tensor from geographic to fracture/fault plane coordinates
+    '''Generates an array for that's used to transform (rotate) the stress tensor from geographic to fracture/fault plane coordinates
 
-    Input is strike and dip in degress following the right hand rule
+    Input is strike and dip in degrees following the right hand rule
     (otherwise, if the fault dipped to the left when viewed along strike, then the dip would be a negitve number - not ideal)
-    Returns a matrix that is used in the matrix multiplcation that makes the conversion
+    Returns a matrix that is used in the matrix multiplication that makes the conversion
     Function is called by the fSf that does the transformation 
     Method from pp 156-157 in Zoback (2010)'''
     strike = math.radians(strike)
@@ -63,7 +63,7 @@ def rake(Sf):
     Input the stress tensor in the coordinate system of the fracture
     Output is the rake of the fracture 
     Output is used in fRt to generate an array that transformations (rotates) the stress tensor into the the rake vector
-    Function is called by fSr where the transofrmation into the rake vector occurs
+    Function is called by fSr where the transformation into the rake vector occurs
     Contains optional print statements to show which statement is true
     Method from pp 156-157 in Zoback (2010)
     '''
@@ -103,7 +103,7 @@ def Rt(rake):
 def fracture_sn_tau(S1,S2,S3,Pp,Norm,alpha,beta,gamma,strike,dip):
     '''Calculate the shear (tau) and normal (Sn) stress on a fracture
 
-    Normailsation can be to eaither vertical stress or effective vertical stress
+    Normalised to either vertical stress or effective vertical stress
 
     Args:
         S1:
@@ -117,7 +117,7 @@ def fracture_sn_tau(S1,S2,S3,Pp,Norm,alpha,beta,gamma,strike,dip):
         strike:
         dip:
 
-        Reccomendation: this can be efficently done using a tuple 
+        Recommendation: this can be efficiently done using a tuple 
     
     Returns: 
         Sn: Stress normal to the fracture plane [MPa]
@@ -134,24 +134,24 @@ def fracture_sn_tau(S1,S2,S3,Pp,Norm,alpha,beta,gamma,strike,dip):
 
     # use the three Euiler angles to generate an array that is used 
     # to transform the effective stress array into geographic coordinates
-    # x has been added to Rs to diffrenciate it to Rs above
+    # x has been added to Rs to differentiate it to Rs above
     Rsx = Rs(alpha,beta,gamma)  
     #print('Rs: the stress coordinate system based on' + 
     #   'the inputted Euler angles =','\n',Rsx,'\n')
 
-    # rotate the stress tensor into geographic cooridnates
+    # rotate the stress tensor into geographic coordinates
     Sg = Rsx.T@Ss@Rsx                 
     #print('Sg: the effective stress tensor now rotated into' +
     #   'geographic coordinates =','\n',Sg,'\n')
 
     # use the fracture strike an dip to generate an array that is used
-    # to transform the stress field into fracture cooridinates
+    # to transform the stress field into fracture coordinates
     Rfx = Rf(strike,dip)        
     #print('Rf: the matrix that rotates the stress tensor from' + '
     #   'geographic coordinates into the fracture plane coordinates =','\n',Rf,'\n')
 
     # transform the stress field into the fracture coordinate system
-    # x has been added to Rf to diffrenciate it to Rf above
+    # x has been added to Rf to differentiate it to Rf above
     Sf = Rfx@Sg@Rfx.T                 
     #print('Sf: the effective stress tensor now rotated into the' +'
     #   fracture plane coordinate system =','\n',Sf,'\n')
@@ -162,8 +162,8 @@ def fracture_sn_tau(S1,S2,S3,Pp,Norm,alpha,beta,gamma,strike,dip):
     #print('Sn: the effective stress magnitude normal to the' + '
     #   'fault plane (Sf bottom right) normalised to Sv =','\n',Sn,'\n')
 
-    # calcuate the rake of the fracture assuming only dip-slip
-    # x has been added to rake to diffrenciate it from rake function above
+    # calculate the rake of the fracture assuming only dip-slip
+    # x has been added to rake to differentiate it from rake function above
     rakex = rake(Sf)            
     #print('the rake of the slip vector =',rake,'\n')
 
@@ -174,7 +174,7 @@ def fracture_sn_tau(S1,S2,S3,Pp,Norm,alpha,beta,gamma,strike,dip):
     #   'grab the shear stress magnitude along the slip vector =','\n',Rt,'\n')
 
     # transform the stress field into the direction of the rake
-    # x has been added to Rt to diffrencate it from the funcation above
+    # x has been added to Rt to differentiate it from the function above
     Sr = Rtx@Sf@Rtx.T
     #print('Effective stress tensor along the slip vector (Sr) where the' + 
     #   'bottom left (as an absolute number) is the shear stress magnitude (tau) =','\n',Sr,'\n')

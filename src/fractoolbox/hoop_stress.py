@@ -29,13 +29,13 @@ https://github.com/edur409.
 
 Licence 
 -------
-fractoolbox is distributed under an Apache 2.0 licence
+fractoolbox is distributed under an Apache 2.0 license
 https://choosealicense.com/licenses/apache-2.0/
 '''
 
 
 def thermal_stress(therex, K, nu, Tres, Twell):
-    """Thermally induced stess [MPa] assuming a steady state has been reached
+    """Thermally induced stress [MPa] assuming a steady state has been reached
     
     In fractoolbox, tensile stress is -ve and compressive stress is +ve
     This convention means that Twell-Tres is used to find the deltaT 
@@ -47,13 +47,13 @@ def thermal_stress(therex, K, nu, Tres, Twell):
         therex (float): Coefficient of thermal expansion, 
             which is typically 1.e-5 per Kelvin
         K (float): Bulk modulus, which is typically 1.e10
-        nu (float): Possions ratio, which is typically 0.25
+        nu (float): Poisson's ratio, which is typically 0.25
             Ensure that the elastic moduli (K & nu) are internally consistent
         Tres (float): Reservoir temperature in Kelvin
         Twell (float): Internal well temperature in Kelvin, 
             which is typically ~40degC for a high-temperature geothermal well 
-            that was logged by a borehole imager under injection 
-            but this can be higher if well permeability is low 
+            that was logged by a borehole image tool under injection 
+            but this can be higher if well permeability is low.
 
     Returns:
         float: Thermally induced stress (sigma_Dt)
@@ -89,7 +89,7 @@ def theta(n):
 def effhoopstress(SHmax, Shmin, Pp, Pmud, sigma_Dt, R, r, theta):
     """Calculates the magnitude of the effective hoop stress around a vertical borehole
     
-    Conventually, effective hoop stress is referred to as $\sigma_{\theta\theta}$
+    As a convention, effective hoop stress is referred to as $\sigma_{\theta\theta}$.
     Tension here conceptualised as a -ve value (note how deltaT is calculated in this function), 
     so we add sigma_Dt rather than subtracting as the equation appears in Zoback after Kirsh.
     Note that when R = r, we are at the borehole wall.

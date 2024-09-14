@@ -9,7 +9,7 @@ from matplotlib import pyplot as plt
 
 
 def minstress(S1,Pp,mu):
-    '''Use the stress ratio and frictional faulting theroy to estimate the minimum stress
+    '''Use the stress ratio and frictional faulting theory to estimate the minimum stress
     
     Args:
         Pp: Pore pressure MPa 
@@ -23,7 +23,7 @@ def minstress(S1,Pp,mu):
     return S3
 
 def maxstress(S3,Pp,mu):
-    '''Using the stress ratio and frictional faulting theroy to estimate the maximum stress
+    '''Using the stress ratio and frictional faulting theory to estimate the maximum stress
     
     Args:
         Pp: Pore pressure MPa 

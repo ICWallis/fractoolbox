@@ -27,7 +27,7 @@ from .stress_polygon import minstress
 from .stress_polygon import maxstress
 from .stress_polygon import poly
 
-__version__ = '0.1-dev'
+__version__ = '0.0'
 
 __all__ = [
     'dip2strike',       # data_wrangling

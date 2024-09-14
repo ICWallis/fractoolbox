@@ -54,9 +54,9 @@ supervised by David Dempsey https://github.com/ddempsey and
 Julie (JR) Rowland, with math/code contributions from Evert Durán 
 https://github.com/edur409.
 
-Licence 
+License 
 -------
-fractoolbox is distributed under an Apache 2.0 licence
+fractoolbox is distributed under an Apache 2.0 license
 https://choosealicense.com/licenses/apache-2.0/
 '''
 

@@ -2,8 +2,6 @@
 # Stress Tensor Estimation
 # ========================
 '''
-
-
 Contributions
 -------------
 fractoolbox was initiated by Irene Wallis https://github.com/ICWallis/fractoolbox
@@ -12,9 +10,9 @@ supervised by David Dempsey https://github.com/ddempsey and
 Julie (JR) Rowland, with math/code contributions from Evert Durán 
 https://github.com/edur409.
 
-Licence 
+License 
 -------
-fractoolbox is distributed under an Apache 2.0 licence
+fractoolbox is distributed under an Apache 2.0 license
 https://choosealicense.com/licenses/apache-2.0/
 '''
 import numpy as np
@@ -30,7 +28,7 @@ def linear_Sv(maxdepth,obsdepth,density):
         maxdepth (float): The maximum depth of the stress model [m]
         obsdepth (float or list of floats): Depth(s) where Sv will be returned [m]
         density (float): average rock density [kg/m3] which is typically 2200 - 2800
-        All args accept float or interger values
+        All args accept float or integer values
 
     Returns:
         Sv at obsdepth [MPa] as float or list of floats
