@@ -1,4 +1,4 @@
-name: frac_env
+name: fractoolbox
 channels:
   - defaults
 dependencies:

@@ -41,3 +41,4 @@ from .stress_polygon import (
     maxstress,
     poly,
 )
+
