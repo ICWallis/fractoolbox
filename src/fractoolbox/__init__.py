@@ -1,58 +1,43 @@
-from .conversion import dip2strike
-from .conversion import strike2dipaz
 
-from .geometric_bias import unitvectorx
-from .geometric_bias import unitvectory
-from .geometric_bias import unitvectorz
-from .geometric_bias import isogeniccontour
+from .conversion import (
+    dip2strike,
+    strike2dipaz,
+)
 
-from .mohr_plot import sigma_m
-from .mohr_plot import tau_s
-from .mohr_plot import sigma_n
-from .mohr_plot import mohr3d
+from .geometric_bias import (
+    unitvectorx,
+    unitvectory,
+    unitvectorz,
+    isogeniccontour,
+)
 
-from .hoop_stress import thermal_stress
-from .hoop_stress import theta
-from .hoop_stress import effhoopstress
+from .mohr_plot import (
+    sigma_m,
+    tau_s,
+    sigma_n,
+    mohr3d,
+)
 
-from .transform_stress_tensor import Rs
-from .transform_stress_tensor import Rf
-from .transform_stress_tensor import rake
-from .transform_stress_tensor import Rt
-from .transform_stress_tensor import fracture_sn_tau
+from .hoop_stress import (
+    thermal_stress,
+    theta,
+    effhoopstress,
+)
 
-from .stress_models import linear_Sv
+from .transform_stress_tensor import (
+    Rs,
+    Rf,
+    rake,
+    Rt,
+    fracture_sn_tau,
+)
 
-from .stress_polygon import minstress
-from .stress_polygon import maxstress
-from .stress_polygon import poly
+from .stress_models import (
+    linear_Sv,
+)
 
-__version__ = '0.0'
-
-__all__ = [
-    'dip2strike',       # data_wrangling
-    'strike2dipaz',
-    'xyzinterp',
-    'linear_interpolate_2dp', 
-    'unitvectorx',      # geometric_bias
-    'unitvectory',
-    'unitvectory',
-    'unitvectorz',
-    'isogeniccontour',
-    'sigma_m',          # mohr_plot
-    'tau_s',
-    'sigma_n',
-    'mohr3d',
-    'thermal_stress',   # hoop_stress
-    'theta',
-    'effhoopstress',
-    'Rs',               # transform_stress_tensor
-    'Rf',
-    'rake',
-    'Rt',
-    'fracture_sn_tau',
-    'linSv',            # stress_models
-    'minstress',
-    'maxstress',
-    'poly'
-    ]
+from .stress_polygon import (
+    minstress,
+    maxstress,
+    poly,
+)
