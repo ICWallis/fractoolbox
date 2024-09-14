@@ -1,30 +1,30 @@
 
 
-from src.conversion import dip2strike
-from src.conversion import strike2dip
+from .conversion import dip2strike
+from .conversion import strike2dipaz
 
 
-from src.geometric_bias import (
+from .geometric_bias import (
     unitvectorx,
     unitvectory,
     unitvectorz,
     isogeniccontour,
 )
 
-from src.mohr_plot import (
+from .mohr_plot import (
     sigma_m,
     tau_s,
     sigma_n,
     mohr3d,
 )
 
-from src.hoop_stress import (
+from .hoop_stress import (
     thermal_stress,
     theta,
     effhoopstress,
 )
 
-from src.transform_stress_tensor import (
+from .transform_stress_tensor import (
     Rs,
     Rf,
     rake,
@@ -32,11 +32,11 @@ from src.transform_stress_tensor import (
     fracture_sn_tau,
 )
 
-from src.stress_models import (
+from .stress_models import (
     linear_Sv,
 )
 
-from src.stress_polygon import (
+from .stress_polygon import (
     minstress,
     maxstress,
     poly,

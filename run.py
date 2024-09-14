@@ -1,10 +1,11 @@
 import sys
 import os
 
-sys.path.append(os.path.join(os.path.dirname(__file__), 'fractoolbox'))
+# sys.path.append(os.path.join(os.path.dirname(__file__), 'fractoolbox'))
 
 
-import fractoolbox as ftb
+from fractoolbox import dip2strike, thermal_stress
 
-strike = ftb.dip2strike(45)
-print(strike)
+print(dip2strike(30))
+
+print(thermal_stress(34, 2, 33, 22, 60))
