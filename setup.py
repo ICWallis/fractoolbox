@@ -1,20 +1,20 @@
 from setuptools import find_packages, setup
 
-with open("app/README.md", "r") as f:
-    long_description = f.read()
+# with open("app/README.md", "r") as f:
+#     long_description = f.read()
 
 setup(
     name="fractoolbox",
     version="0.0.0",
     description="A toolbox for structural geology, borehole image analysis, and geomechanics",
-    package_dir={"": "src"},
-    packages=find_packages(where="src"),
-    long_description=long_description,
+    package_dir={"": "fractoolbox"},
+    packages=find_packages(where="fractoolbox"),
+    long_description= "Long description TBC", # long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/ICWallis/fractoolbox",
     author="Irene Wallis",
     author_email="irene@cubicearth.nz",
-    license="MIT",
+    license="Apatche 2.0",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache 2.0 License",

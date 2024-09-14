@@ -9,7 +9,7 @@ The Right-Hand Rule:
     Place your right hand on the fracture plane with fingers pointed down
     the direction of dip. Your thumb now points to the strike azimuth.
 
-Licence
+License
 -------
 The content of this repository is licensed under the Apache License, 
 Version 2.0 (the "License"); you may use these files if you comply with 

@@ -1,6 +1,4 @@
 
-# Customized git ignore
-
 # Data
 *.xls
 *.xlsx
