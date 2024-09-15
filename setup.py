@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
-# with open("app/README.md", "r") as f:
-#     long_description = f.read()
+with open("README.md", "r") as f:
+    description = f.read()
 
 setup(
     name="fractoolbox",
@@ -9,7 +9,7 @@ setup(
     description="A toolbox for structural geology, borehole image analysis, and geomechanics",
     # package_dir={"": "fractoolbox"},
     packages=find_packages(),
-    long_description= "Long description TBC", # long_description,
+    long_description=description, 
     long_description_content_type="text/markdown",
     url="https://github.com/ICWallis/fractoolbox",
     author="Irene Wallis",
