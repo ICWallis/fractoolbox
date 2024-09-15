@@ -1,8 +1,9 @@
 
 
-from .conversion import dip2strike
-from .conversion import strike2dipaz
-
+from .conversion import (
+    dip2strike,
+    strike2dipaz,
+)
 
 from .geometric_bias import (
     unitvectorx,
@@ -34,6 +35,7 @@ from .transform_stress_tensor import (
 
 from .stress_models import (
     linear_Sv,
+    estimate_shmin_cfc,
 )
 
 from .stress_polygon import (

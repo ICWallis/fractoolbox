@@ -44,3 +44,22 @@ def linear_Sv(maxdepth,obsdepth,density):
     Sv_obsdepth = np.around((np.interp(obsdepth, depth_model, Sv_model)),2)
     
     return Sv_obsdepth
+
+def estimate_shmin_cfc(Sv, Pp, mu):
+    '''
+    Use Coulomb frictional-failure theory for normal faulting to estimate Shmin.
+
+    - Equation from Zoback (2010)
+    
+        Args:   Pp Pore pressure (MPa) 
+                Sv Overburden stress (MPa)
+                mu Coefficient of friction (unitless)
+        
+        Coefficient of friction should be around 0.6 in the deep reservior
+        and around 0.3 in the clay cap and shallow aquifer zone 
+            
+        Returns: Estimate of Shmin (MPa)
+    '''
+    Shmin = ((Sv - Pp)/(((mu**2 + 1.)**0.5 + mu)**2)) + Pp
+    return Shmin
+
