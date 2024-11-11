@@ -18,7 +18,7 @@ https://choosealicense.com/licenses/apache-2.0/
 import numpy as np
 from scipy import integrate
 
-def linear_Sv(maxdepth,obsdepth,density):
+def simple_linear_Sv(maxdepth,obsdepth,density):
     """Magnitude of overburden stress [Sv in MPa] at a given observation depth
 
     Simple integration model that uses single average density and 
@@ -44,6 +44,70 @@ def linear_Sv(maxdepth,obsdepth,density):
     Sv_obsdepth = np.around((np.interp(obsdepth, depth_model, Sv_model)),2)
     
     return Sv_obsdepth
+
+
+
+def Sv(depth, porosity, dry_rock_density, fluid_density):
+    '''
+    Calculate vertical stress in MPa for a given depth, porosity, dry rock density and fluid density.
+        
+    This function computes the vertical stress (Sv) at various depths using the bulk density profile 
+    derived from input porosity, dry rock density, and fluid density. Vertical stress is calculated 
+    through integration of gravitational force on the bulk density along depth.
+
+    Parameters:
+    - depth (array-like): Depth values in meters.
+    - porosity (float or array-like): Porosity values (fraction of volume). If a single value is given, 
+      it will be applied uniformly across all depths.
+    - dry_rock_density (float or array-like): Density of dry rock in kg/m³. If a single value is given, 
+      it will be applied uniformly across all depths.
+    - fluid_density (float or array-like): Density of fluid in kg/m³. If a single value is given, 
+      it will be applied uniformly across all depths.
+
+    Returns:
+    - vertical_stress_min_MPa (ndarray): Calculated vertical stress values at each input depth.
+    
+    Notes:
+    - The function assumes gravitational acceleration to be 9.8 m/s².
+    - The `integrate.cumtrapz` method is used for numerical integration.
+
+    Suggestions:
+    - Use the following units: depth in meters, density in kg/m³, porosity as a decimal percentage. 
+    - Result Sv is returned in Pa. Multiply by 1e-6 to convert to MPa.
+
+    '''
+    # If dry_rock_density is a single value, convert to a list with the same length as depth
+    if isinstance(dry_rock_density, (int, float)):
+        dry_rock_density = [dry_rock_density] * len(depth)
+    else:
+        dry_rock_density = dry_rock_density
+    
+    # If porosity is a single value, convert to a list with the same length as depth
+    if isinstance(porosity, (int, float)):
+        porosity = [porosity] * len(depth)
+    else:
+        porosity = porosity
+
+    # If fluid_density is a single value, convert to a list with the same length as depth
+    if isinstance(fluid_density, (int, float)):
+        fluid_density = [fluid_density] * len(depth)
+    else:
+        fluid_density = fluid_density
+    
+    
+    # Calculate bulk density
+    bulk_density = (1 - np.array(porosity)) * np.array(dry_rock_density) \
+                             + np.array(porosity) * np.array(fluid_density)
+    
+    # Calculate gravitational force on bulk density and create arrays
+    x = np.array(depth)
+    y = np.array(bulk_density) * 9.8  # density array * gravity
+    
+    # Integrate arrays calculate vertical stress in Pa and convert to MPa
+    vertical_stress = integrate.cumtrapz(y, x, initial=0)
+    
+    return vertical_stress
+
 
 def estimate_shmin_cfc(Sv, Pp, mu):
     '''

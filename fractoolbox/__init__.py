@@ -25,6 +25,24 @@ from .hoop_stress import (
     effhoopstress,
 )
 
+from .hoops_stress_inclined_borehole import (
+    normalise_by_value,
+    radians_to_degrees,
+    make_stress_tensor,
+    make_effective_stress_tensor,
+    geographic_rotation_array,
+    borehole_rotation_array,
+    transform_from_initial_to_borehole,
+    calculate_sigma_zz,
+    calculate_sigma_tt,
+    calculate_tau_tz,
+    calculate_sigma_rr,
+    calculate_omega_angle,
+    calculate_sigma_tmax,
+    calculate_sigma_tmin,
+    peska_plot,
+)
+
 from .transform_stress_tensor import (
     Rs,
     Rf,
@@ -34,7 +52,8 @@ from .transform_stress_tensor import (
 )
 
 from .stress_models import (
-    linear_Sv,
+    simple_linear_Sv,
+    Sv,
     estimate_shmin_cfc,
 )
 
