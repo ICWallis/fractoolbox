@@ -41,6 +41,7 @@ from .hoops_stress_inclined_borehole import (
     calculate_sigma_tmax,
     calculate_sigma_tmin,
     peska_plot,
+    theta_omega_printer,
 )
 
 from .transform_stress_tensor import (
@@ -55,6 +56,7 @@ from .stress_models import (
     simple_linear_Sv,
     Sv,
     estimate_shmin_cfc,
+    shmax_from_ESR,
 )
 
 from .stress_polygon import (

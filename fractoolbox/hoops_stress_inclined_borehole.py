@@ -521,3 +521,122 @@ def peska_plot(
     ax3.set_ylabel('Azimuth of Omega in degrees')
 
     return plt
+
+
+def theta_omega_printer(
+        S1,
+        S2s, # function designed so more than one can be passed, must be list
+        S3,
+        Pp, 
+        SHmax_orientations, # function designed so more than one can be passed, must be lists
+        beta, 
+        gamma, 
+        well_az, 
+        well_inc,
+        deltaP,
+        nu,
+        ):
+    '''
+    Function that pints the theta (distance from low side)
+    and omega (tilt) of the tensile fracture
+
+    THis function has the assumptions that make S1 always vertical
+
+    '''
+    # make empty lists to append thetas and omegas to
+    thetas = []
+    omegas = []
+
+    for S2, SHmax_ort in zip(S2s, SHmax_orientations):
+        alpha = SHmax_ort - 90
+        # =======================================================================================
+        # Forward model: Given a known S2 and alpha, what is the tensile fracture theta and omega
+        # =======================================================================================
+        # Implemented as a two step process that brute forces the result
+        # Step 1: Makes a list with all of the possible options
+        # Step 2: Find the minimum theta of that list and the index location of that minimum value
+        # Step 3: Use that index value to call the omega 
+        # Step 4: Plot the results as a sense check
+
+        # -----------------------------------------------------
+        # Step 1: Makes a list with all of the possible options
+        # -----------------------------------------------------
+
+        # Make effective stress tensor
+        effective_stress_tensor = make_effective_stress_tensor(S1,S2,S3,Pp)
+
+        # Rotate stress tensor into geographic and then borehole coordinates
+        effective_stress_tensor_borehole = transform_from_initial_to_borehole(effective_stress_tensor, alpha, beta, gamma, well_az, well_inc)
+
+        # Make objects from the stress tensor                     # sigma_ij
+        sigma_one = effective_stress_tensor_borehole[0][0]        # sigma_11 MPa
+        sigma_two = effective_stress_tensor_borehole[1][1]        # sigma_22 MPa
+        sigma_three = effective_stress_tensor_borehole[2][2]      # sigma_33 MPa
+        sigma_tauA = effective_stress_tensor_borehole[0][1]       # sigma_12 MPa
+        sigma_tauB = effective_stress_tensor_borehole[1][2]       # sigma_23 MPa
+        sigma_tauC = effective_stress_tensor_borehole[0][2]       # sigma_13 MPa
+
+        # Theta a around the borehole for calculations (radians)
+        theta = np.linspace(0, math.radians(180), 3600) 
+        # Only half the borehole done because the other half is the same
+
+        # Theta for plotting (degrees)
+        theta_degrees = radians_to_degrees(theta)
+
+        # Calculate stresses on borehole wall
+        sigma_zz = calculate_sigma_zz(theta, sigma_one, sigma_two, sigma_three,  sigma_tauA, nu)
+        sigma_tt = calculate_sigma_tt(theta, sigma_one, sigma_two, sigma_tauA, deltaP)
+        tau_tz = calculate_tau_tz(theta, sigma_tauB, sigma_tauC)
+        sigma_rr = calculate_sigma_rr(theta, deltaP)
+
+        # Calculate stresses on the plan tangential to the borehole wall
+        sigma_tmax = calculate_sigma_tmax(sigma_zz, sigma_tt, tau_tz)
+        sigma_tmin = calculate_sigma_tmin(sigma_zz, sigma_tt, tau_tz)
+
+        # Calculate the angle between Sigma_tmax and the borehole axis
+        omega = calculate_omega_angle(sigma_zz, sigma_tt, tau_tz)
+
+        # Normalize results to S1
+        sigma_zz_norm = normalise_by_value(sigma_zz, sigma_one)
+        sigma_tt_norm = normalise_by_value(sigma_tt, sigma_one)
+        tau_tz_norm = normalise_by_value(tau_tz, sigma_one)
+        sigma_rr_norm = normalise_by_value(sigma_rr, sigma_one)
+        sigma_tmax_norm = normalise_by_value(sigma_tmax, sigma_one)
+        sigma_tmin_norm = normalise_by_value(sigma_tmin, sigma_one)
+
+        # ----------------------------------------------------------------------------------------
+        # Step 2: Find the minimum theta of that list and the index location of that minimum value
+        # ----------------------------------------------------------------------------------------
+
+        # Find the location in the list of minimum sigma_tmin and 
+        # use that index location to find the corresponding theta angle
+        min_sigma_tmin = min(sigma_tmin)
+        index_min_sigma_tmin = sigma_tmin.index(min_sigma_tmin)
+        tensile_fracture_theta = theta_degrees[index_min_sigma_tmin]
+
+        #tensile_fracture_theta 
+        #print('Calculated tensile fracture theta = ', tensile_fracture_theta)
+        thetas.append(tensile_fracture_theta)
+        #print('Case study tensile fracture theta = ', tensile_fracture_theta_measured)
+        # theta_degrees_min_sigma_tmin is the angle in degrees from the low side of the borehole
+        # to the center of the tensile fracture. This will be observed data.
+
+        # For those non-unique cases where there is more than one minimum
+        # the method above will only return one of the mins
+        # Is there a way to find the other min? Must be some kind of root finding problem.
+        # Or just find a couple of the lowest values
+
+        # ----------------------------------------------
+        # Step 3: Use that index value to call the omega 
+        # ----------------------------------------------
+
+        # Use the index location of the minimum sigma_tmin to to find the angle omega 
+        tensile_fracture_omega = omega[index_min_sigma_tmin]
+        #print('Calculated tensile fracture Omega = ', tensile_fracture_omega)
+        omegas.append(tensile_fracture_omega)
+        #print('Case study tensile fracture Omega = ', tensile_fracture_omega_measured)
+
+        # omega_min_sigma_tmin is the angle of the maximum effective stress on the plane tangential to the borehole wall
+        # which is also the angle of the tensile fracture relative to the borehole axis (one of our knows)
+        # omega + 90 is the minimum principle stress on the tangential plane, and the value often used by peska
+    return thetas, omegas

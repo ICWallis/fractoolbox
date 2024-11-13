@@ -127,3 +127,33 @@ def estimate_shmin_cfc(Sv, Pp, mu):
     Shmin = ((Sv - Pp)/(((mu**2 + 1.)**0.5 + mu)**2)) + Pp
     return Shmin
 
+
+def shmax_from_ESR(ESR_SHmax, Sv, Pp):
+    '''calculate the magnitude of SHmax for a given SHmax Effective Stress Ratio, Pp and Sv.
+
+        Parameters:
+        -----------
+        ESR_SHmax : float
+            The Effective Stress Ratio for SHmax 
+        Sv : float
+            Vertical stress magnitude
+        Pp : float
+            Pore pressure magnitude
+
+        Returns:
+        --------
+        SHmax : float
+            The calculated magnitude of SHmax
+
+        Formula:
+        --------
+        SHmax = ESR_SHmax * (Sv - Pp) + Pp
+
+        Notes:
+        ------
+        - This calculation assumes a linear relationship between SHmax and effective stress as defined by the effective stress ratio.
+        - Ensure consistent units are used for all inputs.
+    '''
+    SHmax = ESR_SHmax * (Sv - Pp) + Pp
+    return SHmax
+
