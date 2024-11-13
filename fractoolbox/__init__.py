@@ -50,6 +50,9 @@ from .transform_stress_tensor import (
     rake,
     Rt,
     fracture_sn_tau,
+    fracture_rotation_array,
+    find_fracture_rake,
+    transform_tensor_from_fracture_plane_to_rake,
 )
 
 from .stress_models import (

@@ -1,6 +1,7 @@
 # ==============
 # # 3D Mohr Plot
 # ==============
+
 '''
 A set of functions that draw the 3D Mohr plot for a given stress tensor
 or ratio between the components of the stress tensor (ie normalised to
@@ -19,6 +20,9 @@ License
 fractoolbox is distributed under an Apache 2.0 license
 https://choosealicense.com/licenses/apache-2.0/
 '''
+import numpy as np
+
+
 
 def sigma_m(bigS,smallS):
     '''
@@ -67,14 +71,15 @@ def sigma_n(bigS,smallS):
     sigma_n=((bigS+smallS)/2)+np.cos(2*theta)*(bigS-smallS)/2
     return sigma_n
 
+
 def mohr3d(S1,S2,S3,N):
     '''
-    Make the arcs of the 3D Mohr plot normalised to N
+    Make the arcs of the 3D Mohr plot normalized to N
 
     Two groups of inputs:
         (1) effective stresses sigma1, sigma2, sigma3 
             ie the three principle stresses minus the pore pressure.
-        (2) A normalisation value (N) which is usually the effective vertical stress
+        (2) A normalization value (N) which is usually the effective vertical stress
     Calls three other functions:
         - sigma_m()
         - tau_s()
@@ -123,3 +128,4 @@ def mohr3d(S1,S2,S3,N):
         meanS.append(m)
     
     return tauS, normS, meanS
+
