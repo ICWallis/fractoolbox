@@ -1,0 +1,12 @@
+https://packaging.python.org/en/latest/specifications/pypirc/
+
+
+https://pypi.org/help/#invalid-auth
+
+Why am I getting an "Invalid or non-existent authentication information." error when uploading files?
+Ensure that your API Token is valid and has not been revoked.
+Ensure that your API Token is properly formatted and does not contain any trailing characters such as newlines.
+Ensure that the username you are using is __token__.
+Remember that PyPI and TestPyPI each require you to create an account, so your credentials may be different.
+
+If you're using Windows and trying to paste your token in the Command Prompt or PowerShell, note that Ctrl-V and Shift+Insert won't work. Instead, you can use "Edit > Paste" from the window menu, or enable "Use Ctrl+Shift+C/V as Copy/Paste" in "Properties". This is a known issue with Python's getpass module.
