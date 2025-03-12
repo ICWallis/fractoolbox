@@ -347,6 +347,8 @@ def calculate_sigma_tt(theta, sigma_one, sigma_two, sigma_tauA, deltaP):
 
                 sigma_one, sigma_two and sigma_tauA are unit agnostic, but the convention is MPa
 
+                NOTE Used in the theta_omega_printer function
+
         Citation: Peska and Zoback (1995)
     '''
     result = []
@@ -492,22 +494,17 @@ def thermal_stress(therex, K, nu, Tres, Twell):
     (eg the function calculate_effective_hoop_stress). This is the opposite convection to 
     to what is used in Zoback (2010) pp 174 eq 6.4.
 
-    Args:
-        therex (float): Coefficient of thermal expansion, 
-            which is typically 1.e-5 per Kelvin
-        K (float): Bulk modulus, which is typically 1.e10
-        nu (float): Poisson's ratio, which is typically 0.25
-            Ensure that the elastic moduli (K & nu) are internally consistent
-        Tres (float): Reservoir temperature in Kelvin
-        Twell (float): Internal well temperature in Kelvin, 
-            which is typically ~40degC for a high-temperature geothermal well 
-            that was logged by a borehole image tool under injection 
-            but this can be higher if well permeability is low.
+    Args:   therex (float): Coefficient of thermal expansion, which is typically 1.e-5 per Kelvin
+            K (float): Bulk modulus, which is typically 1.e10
+            nu (float): Poisson's ratio, which is typically 0.25. 
+            Tres (float): Reservoir temperature in Kelvin
+            Twell (float): Internal well temperature in Kelvin (ie temp of injected fluid)
 
-    Returns:
-        float: Thermally induced stress (sigma_Dt)
+    Returns:    (float) Thermally induced stress, sigma_Dt
     
-    Function written by Irene using eq 7.150  P204 Jager et al (2007)
+    Notes:  Function written by Irene using eq 7.150  P204 Jager et al (2007)
+            Ensure that the elastic moduli (K & nu) are internally consistent
+
     """
     sigma_Dt = (
         (
@@ -523,25 +520,25 @@ def calculate_effective_hoop_stress(SHmax, Shmin, Pp, Pmud, sigma_Dt, R, r, thet
     """Calculates the magnitude of the effective hoop stress around a vertical borehole
     
     As a convention, effective hoop stress is referred to as $\sigma_{\theta\theta}$.
+    
     Tension here conceptualized as a -ve value (note how deltaT is calculated in this function), 
     so we add sigma_Dt rather than subtracting as the equation appears in Zoback after Kirsh.
+    
     Note that when R = r, we are at the borehole wall.
     
-    Args:
-        SHmax (float): Magnitude of the maximum horizontal stress MPa (total stress not effective stress)
-        Shmin (float): Magnitude of the minimum horizontal stress MPa (total stress not effective stress)
-        Pp (float): Pore pressure in MPa
-        Pmud (float): Pressure inside the well in MPa (consider equivalent circulating density)
-        sigma_Dt (float): Magnitude of thermal stress MPa (refer to the fsigma_Dt function where deltaT = Twell - Tres)
-        R (float): Wellbore radius
-        r (float): Depth of investigation as radial distance from the centre of the well
-        theta (float): the azimuths around the wellbore signam_rr will be calculated for (refer to the ftheta function) 
+    Args:   SHmax (float): Magnitude of the maximum horizontal stress MPa (total stress not effective stress)
+            Shmin (float): Magnitude of the minimum horizontal stress MPa (total stress not effective stress)
+            Pp (float): Pore pressure in MPa
+            Pmud (float): Pressure inside the well in MPa (consider equivalent circulating density)
+            sigma_Dt (float): Magnitude of thermal stress MPa (refer to the thermal_stress function where deltaT = Twell - Tres)
+            R (float): Wellbore radius
+            r (float): Depth of investigation as radial distance from the centre of the well
+            theta (float): the azimuths around the wellbore sigma_rr will be calculated for (refer to the theta function) 
     
-    Returns:
-        (float) A list effective hoop stress at azimuths specified by theta (ie $sigma_{\tau\tau}$)
+    Returns:    (float) A list effective hoop stress at azimuths specified by theta (ie $sigma_{\tau\tau}$)
 
-    Function written by Evert using Kirsh (1898) as presented in Jager et al. (2007) and Zoback (2010)
-    
+    Notes:  Function written by Evert using Kirsh (1898) as presented in Jager et al. (2007) and Zoback (2010)
+            NOTE this is not the version of sigma_tt used in the theta_omega_printer function 
     """
     sigma_tt = (
                 0.5 * (SHmax + Shmin - 2 * Pp)
@@ -572,7 +569,7 @@ def radians_to_degrees(radians):
     '''
     Convert list of radians to list of degrees
 
-        Args: radians (list or 1D array) angle in radians
+        Args:   radians (list or 1D array) angle in radians
 
         Returns: list of given angles in degrees
     '''
@@ -598,21 +595,21 @@ def peska_plot(
     '''
     Standardized plot for checking the model results
 
-        Args:       theta_degrees (list, float):  x axis value, azimuth around the borehole
+        Args:   theta_degrees (list, float):  x axis value, azimuth around the borehole
 
-                    # All of the following must have the same shape as theta_degrees
-                    # They are stresses projected into borehole coordinates
-                    sigma_zz_norm (list, float): vertical stress 
-                    sigma_tt_norm (list, float): hoop stress
-                    tau_tz_norm (list, float): shear stress
-                    sigma_rr_norm (list, float): radial stress
-                    sigma_tmax_norm (list, float): maximum normal stress, where the maximum point(s) on this curve defines the borehole breakout depending on the compressive rock strength
-                    sigma_tmin_norm (list, float): minimum normal stress, where the minimum point(s) on this curve defines the tensile fractures
-                    omega (list, float): Possible angles of the tensile fractures relative to the borehole axis
-                    
-                    # Single values plotted as vertical lines
-                    theta_degrees_min_sigma_tmin (float): Angle of the tensile fracture relative to the low side of the borehole
-                    omega_min_sigma_tmin (float): Angle of the tensile fracture relative to the borehole axis
+                # All of the following must have the same shape as theta_degrees
+                # They are stresses projected into borehole coordinates
+                sigma_zz_norm (list, float): vertical stress 
+                sigma_tt_norm (list, float): hoop stress
+                tau_tz_norm (list, float): shear stress
+                sigma_rr_norm (list, float): radial stress
+                sigma_tmax_norm (list, float): maximum normal stress, where the maximum point(s) on this curve defines the borehole breakout depending on the compressive rock strength
+                sigma_tmin_norm (list, float): minimum normal stress, where the minimum point(s) on this curve defines the tensile fractures
+                omega (list, float): Possible angles of the tensile fractures relative to the borehole axis
+                
+                # Single values plotted as vertical lines
+                theta_degrees_min_sigma_tmin (float): Angle of the tensile fracture relative to the low side of the borehole
+                omega_min_sigma_tmin (float): Angle of the tensile fracture relative to the borehole axis
 
         Returns:    A plot object
 

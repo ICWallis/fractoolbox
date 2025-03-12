@@ -19,10 +19,35 @@ from .mohr_plot import (
     mohr3d,
 )
 
-from .hoop_stress import (
-    thermal_stress,
+from .stress_tensor_manipulation import (
+    # make stress tensors
+    make_stress_tensor,
+    make_effective_stress_tensor,
+    # transform stress tensors
+    geographic_rotation_array,
+    fracture_rotation_array,
+    borehole_rotation_array,
+    transform_from_initial_to_borehole,
+    # hoop stress
     theta,
-    effhoopstress,
+    calculate_sigma_zz,
+    calculate_sigma_tt,
+    calculate_tau_tz,
+    calculate_sigma_rr,
+    calculate_omega_angle,
+    calculate_sigma_tmax,
+    calculate_sigma_tmin,
+    thermal_stress,
+    calculate_effective_hoop_stress,
+    normalise_by_value,
+    radians_to_degrees,
+    peska_plot,
+    theta_omega_printer,
+    # fracture stress calculations
+    find_fracture_rake,
+    transform_tensor_from_fracture_plane_to_rake,
+    fracture_sn_tau, # example, function will not return anything
+
 )
 
 from .hoops_stress_inclined_borehole import (
