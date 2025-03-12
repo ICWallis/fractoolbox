@@ -4,91 +4,126 @@ import numpy as np
 import math
 import pandas as pd
 
-
-
-def Rs(alpha,beta,gamma):
-    '''Generates an array that's used to transform (rotate) the stress tensor into a geographic coordinate system 
+def geographic_rotation_array(alpha,beta,gamma):
+    '''Returns array used to transform an initial stress tensor into the geographic coordinate system 
     
-    Geographic coordinates are X North, Y East, and Z Down.
-    Input Euler angles alpha, beta, gamma in degrees
-    Defining the stress field in Euler angles...
-    If S1 is vertical (normal faulting) then:
-        alpha = the trend of SHmax - pi/2 (aka the azimuth in degrees minus 90 degrees)
-        beta = the -ve trend of Sv (aka -90 for vertical stress)
-        gamma = 0.
-    If S1 is horizontal (strike slip or reverse faulting) then:
-        alpha = trend of S1
-        beta = -ve plunge of S1
-        gamma = rake of S2
-    Output is an array.
-    Function is called by fSg that makes the matrix multiplication to do the transformation
-    Method from appendix in Peska and Zoback (1995)
+        Args:   alpha (float) Euler angle alpha in degrees (refer to notes below)
+                beta (float) Euler angle alpha in degrees (refer to notes below)
+                gamma (float) Euler angle alpha in degrees (refer to notes below)
+
+        Returns:    Array used for transformation
+                    Referred to as Rs by Peska/Zoback 
+
+        Notes:  Function called by transform_from_initial_to_geographic (fSg) which does the 
+                matrix multiplication to execute the transformation
+
+                Geographic coordinates are X North, Y East, and Z Down.
+                
+                Defining the stress field in Euler angles:
+                    
+                    If S1 is vertical (normal faulting) then:
+                        alpha = the trend of SHmax - pi/2 (aka the azimuth in degrees minus 90 degrees)
+                        beta = the -ve trend of Sv (aka -90 for vertical stress)
+                        gamma = 0.
+                    
+                    If S1 is horizontal (strike slip or reverse faulting) then:
+                        alpha = trend of S1
+                        beta = -ve plunge of S1
+                        gamma = rake of S2
+                
+                NOTE Function used to be called fRs
+
+        Citation:   Peska and Zoback (1995)
     '''
     alpha = math.radians(alpha)
     beta = math.radians(beta)
     gamma = math.radians(gamma)
+
     Rs = np.array([
-                [np.cos(alpha)*np.cos(beta), 
-                 np.sin(alpha)*np.cos(beta), 
-                 -np.sin(beta)],
-                [np.cos(alpha)*np.sin(beta)*np.sin(gamma)-np.sin(alpha)*np.cos(gamma), 
-                 np.sin(alpha)*np.sin(beta)*np.sin(gamma)+np.cos(alpha)*np.cos(gamma), 
-                 np.cos(beta)*np.sin(gamma)],
-                [np.cos(alpha)*np.sin(beta)*np.cos(gamma)+np.sin(alpha)*np.sin(gamma),
-                 np.sin(alpha)*np.sin(beta)*np.cos(gamma)-np.cos(alpha)*np.sin(gamma),
-                 np.cos(beta)*np.cos(gamma)]
-                ])
+        [np.cos(alpha) * np.cos(beta), 
+         np.sin(alpha) * np.cos(beta), 
+         -np.sin(beta) ],
+        [np.cos(alpha) * np.sin(beta) * np.sin(gamma) - np.sin(alpha) * np.cos(gamma), 
+         np.sin(alpha) * np.sin(beta) * np.sin(gamma) + np.cos(alpha) * np.cos(gamma), 
+         np.cos(beta) * np.sin(gamma) ],
+        [np.cos(alpha) * np.sin(beta) * np.cos(gamma) + np.sin(alpha) * np.sin(gamma),
+         np.sin(alpha) * np.sin(beta) * np.cos(gamma) - np.cos(alpha) * np.sin(gamma),
+         np.cos(beta) * np.cos(gamma) ]
+    ])
     return Rs 
 
-def Rf(strike,dip):
-    '''Generates an array for that's used to transform (rotate) the stress tensor from geographic to fracture/fault plane coordinates
+def fracture_rotation_array(strike,dip):
+    '''Generate array used to transform the stress tensor from geographic to fracture/fault plane coordinates
 
-    Input is strike and dip in degrees following the right hand rule
-    (otherwise, if the fault dipped to the left when viewed along strike, then the dip would be a negitve number - not ideal)
-    Returns a matrix that is used in the matrix multiplication that makes the conversion
-    Function is called by the fSf that does the transformation 
-    Method from pp 156-157 in Zoback (2010)'''
+        Args:   strike (float)  Fracture strike in degrees
+                dip (float)     Fracture dip in degrees
+
+        Returns:    2D array used to do transformation
+                    Referred to as Rf by Zoback (2010)
+
+        Notes:  Strike and dip must follow the right hand rule
+
+                If strike and dip doesn't follow the right hand rule and 
+                the fault dipped to the left when viewed along strike, 
+                then the dip would be a negative number (not ideal for handling here)
+
+                Function is called by the fSf that does the transformation 
+
+                NOTE function used to be called fRf
+        
+        Citation: Zoback (2010) pp 156-157
+    '''
     strike = math.radians(strike)
     dip = math.radians(dip)
+
     Rf = np.array([
-                    [np.cos(strike),np.sin(strike),0],
-                    [np.sin(strike)*np.cos(dip), -np.cos(strike)*np.cos(dip), -np.sin(dip)],
-                    [-np.sin(strike)*np.sin(dip),np.cos(strike)*np.sin(dip),-np.cos(dip)]
+        [np.cos(strike), np.sin(strike), 0],
+        [np.sin(strike)*np.cos(dip), -np.cos(strike)*np.cos(dip), -np.sin(dip)],
+        [-np.sin(strike)*np.sin(dip), np.cos(strike)*np.sin(dip), -np.cos(dip)]
     ])
+
     return Rf
 
-def rake(Sf):
-    '''Boolen expression used to calculate the rake of a fracture
+
+def find_fracture_rake(Sf):
+    '''Boolean expression used to calculate the rake of a fracture
     
-    Input the stress tensor in the coordinate system of the fracture
-    Output is the rake of the fracture 
-    Output is used in fRt to generate an array that transformations (rotates) the stress tensor into the the rake vector
+    Input the stress tensor in the coordinate system of the fracture.
+    Output is the rake of the fracture. 
+    
+    Output is used in transform_tensor_from_fracture_plane_to_rake (Rt) to generate an array that 
+    transformations (rotates) the stress tensor into the the rake vector.
+    
     Function is called by fSr where the transformation into the rake vector occurs
+
     Contains optional print statements to show which statement is true
     Method from pp 156-157 in Zoback (2010)
     '''
     A = Sf[2,1]
     B = Sf[2,0]
     if A > 0.00001 and B > 0.00001:
-        r = np.arctan(A/B) 
+        rake = np.arctan(A/B) 
         #print('r is case 1')
     elif A > 0.00001 and B < 0.00001:
-        r = np.arctan(A/B) 
+        rake = np.arctan(A/B) 
         #print('r is case 2')
     elif A < 0.00001 and B >= 0.00001:
-        r = math.radians(180)-np.arctan(A/-B)
+        rake = math.radians(180)-np.arctan(A/-B)
         #print('r is case 3')
     elif A < 0.00001 and B < 0.00001:
-        r = np.arctan(-A/-B)-math.radians(180)
+        rake = np.arctan(-A/-B)-math.radians(180)
         #print('r is case 4')
-    return r
+    return rake
 
-def Rt(rake):
+def transform_tensor_from_fracture_plane_to_rake(rake):
     '''
     Generates an array for that's used to transform the stress tensor from fracture plane coordinates into the rake vector
     
-    Input is the rake of the fracture/fault generated by frake
-    Output is called by fSr used to transformation (rotate) the stress tensor into the frake vector where |Sr(3,1)| is the shear stress magnatude (tau)
+    Input is the rake of the fracture/fault generated by the function find_fracture_rake.
+    Output is called by fSr used to transformation (rotate) the stress tensor into the rake vector.
+
+    where |Sr(3,1)| is the shear stress magnitude (tau)
+
     Method from pp 156-157 in Zoback (2010)
     '''
     Rt = np.array([
@@ -98,7 +133,101 @@ def Rt(rake):
                 ])
     return Rt
 
+# def Rs(alpha,beta,gamma):
+#     '''Generates an array that's used to transform (rotate) the stress tensor into a geographic coordinate system 
+    
+#     Geographic coordinates are X North, Y East, and Z Down.
+#     Input Euler angles alpha, beta, gamma in degrees
+#     Defining the stress field in Euler angles...
+#     If S1 is vertical (normal faulting) then:
+#         alpha = the trend of SHmax - pi/2 (aka the azimuth in degrees minus 90 degrees)
+#         beta = the -ve trend of Sv (aka -90 for vertical stress)
+#         gamma = 0.
+#     If S1 is horizontal (strike slip or reverse faulting) then:
+#         alpha = trend of S1
+#         beta = -ve plunge of S1
+#         gamma = rake of S2
+#     Output is an array.
+#     Function is called by fSg that makes the matrix multiplication to do the transformation
+#     Method from appendix in Peska and Zoback (1995)
+#     '''
+#     alpha = math.radians(alpha)
+#     beta = math.radians(beta)
+#     gamma = math.radians(gamma)
+#     Rs = np.array([
+#                 [np.cos(alpha)*np.cos(beta), 
+#                  np.sin(alpha)*np.cos(beta), 
+#                  -np.sin(beta)],
+#                 [np.cos(alpha)*np.sin(beta)*np.sin(gamma)-np.sin(alpha)*np.cos(gamma), 
+#                  np.sin(alpha)*np.sin(beta)*np.sin(gamma)+np.cos(alpha)*np.cos(gamma), 
+#                  np.cos(beta)*np.sin(gamma)],
+#                 [np.cos(alpha)*np.sin(beta)*np.cos(gamma)+np.sin(alpha)*np.sin(gamma),
+#                  np.sin(alpha)*np.sin(beta)*np.cos(gamma)-np.cos(alpha)*np.sin(gamma),
+#                  np.cos(beta)*np.cos(gamma)]
+#                 ])
+#     return Rs 
 
+# def Rf(strike,dip):
+#     '''Generates an array for that's used to transform (rotate) the stress tensor from geographic to fracture/fault plane coordinates
+
+#     Input is strike and dip in degrees following the right hand rule
+#     (otherwise, if the fault dipped to the left when viewed along strike, then the dip would be a negitve number - not ideal)
+#     Returns a matrix that is used in the matrix multiplication that makes the conversion
+#     Function is called by the fSf that does the transformation 
+#     Method from pp 156-157 in Zoback (2010)'''
+#     strike = math.radians(strike)
+#     dip = math.radians(dip)
+#     Rf = np.array([
+#                     [np.cos(strike),np.sin(strike),0],
+#                     [np.sin(strike)*np.cos(dip), -np.cos(strike)*np.cos(dip), -np.sin(dip)],
+#                     [-np.sin(strike)*np.sin(dip),np.cos(strike)*np.sin(dip),-np.cos(dip)]
+#     ])
+#     return Rf
+
+# def rake(Sf):
+#     '''Boolen expression used to calculate the rake of a fracture
+    
+#     Input the stress tensor in the coordinate system of the fracture
+#     Output is the rake of the fracture 
+#     Output is used in fRt to generate an array that transformations (rotates) the stress tensor into the the rake vector
+#     Function is called by fSr where the transformation into the rake vector occurs
+#     Contains optional print statements to show which statement is true
+#     Method from pp 156-157 in Zoback (2010)
+#     '''
+#     A = Sf[2,1]
+#     B = Sf[2,0]
+#     if A > 0.00001 and B > 0.00001:
+#         r = np.arctan(A/B) 
+#         #print('r is case 1')
+#     elif A > 0.00001 and B < 0.00001:
+#         r = np.arctan(A/B) 
+#         #print('r is case 2')
+#     elif A < 0.00001 and B >= 0.00001:
+#         r = math.radians(180)-np.arctan(A/-B)
+#         #print('r is case 3')
+#     elif A < 0.00001 and B < 0.00001:
+#         r = np.arctan(-A/-B)-math.radians(180)
+#         #print('r is case 4')
+#     return r
+
+# def Rt(rake):
+#     '''
+#     Generates an array for that's used to transform the stress tensor from fracture plane coordinates into the rake vector
+    
+#     Input is the rake of the fracture/fault generated by frake
+#     Output is called by fSr used to transformation (rotate) the stress tensor into the frake vector where |Sr(3,1)| is the shear stress magnatude (tau)
+#     Method from pp 156-157 in Zoback (2010)
+#     '''
+#     Rt = np.array([
+#                 [np.cos(rake),np.sin(rake),0],
+#                 [-np.sin(rake),np.cos(rake),0],
+#                 [0,0,1]
+#                 ])
+#     return Rt
+
+
+
+# Template function for combining the method together
 
 def fracture_sn_tau(S1,S2,S3,Pp,Norm,alpha,beta,gamma,strike,dip):
     '''Calculate the shear (tau) and normal (Sn) stress on a fracture
@@ -123,6 +252,7 @@ def fracture_sn_tau(S1,S2,S3,Pp,Norm,alpha,beta,gamma,strike,dip):
         Sn: Stress normal to the fracture plane [MPa]
         tau: Shear stress on the fracture plane [MPa]
 
+    '''
     '''
     # create effective stress array
     Ss = np.array([                 
@@ -185,79 +315,7 @@ def fracture_sn_tau(S1,S2,S3,Pp,Norm,alpha,beta,gamma,strike,dip):
     #print('Shear stress on the plane (tau, which is bottom left of Sr array) =',tau,'\n')
 
     return (Sn,tau)
-
-
-
-def fracture_rotation_array(strike,dip):
-    '''Generate array used to transform the stress tensor from geographic to fracture/fault plane coordinates
-
-        Args:   strike (float)  Fracture strike in degrees
-                dip (float)     Fracture dip in degrees
-
-        Returns:    2D array used to do transformation
-                    Referred to as Rf by Zoback (2010)
-
-        Notes:  Strike and dip must follow the right hand rule
-
-                If strike and dip doesn't follow the right hand rule and 
-                the fault dipped to the left when viewed along strike, 
-                then the dip would be a negative number (not ideal for handling here)
-
-                Function is called by the fSf that does the transformation 
-
-                NOTE function used to be called fRf
-        
-        Citation:   Zoback (2010) pp 156-157
     '''
-    strike = math.radians(strike)
-    dip = math.radians(dip)
 
-    Rf = np.array([
-        [np.cos(strike), np.sin(strike), 0],
-        [np.sin(strike)*np.cos(dip), -np.cos(strike)*np.cos(dip), -np.sin(dip)],
-        [-np.sin(strike)*np.sin(dip), np.cos(strike)*np.sin(dip), -np.cos(dip)]
-    ])
 
-    return Rf
 
-def find_fracture_rake(Sf):
-    '''Boolean expression used to calculate the rake of a fracture
-    
-    Input the stress tensor in the coordinate system of the fracture
-    Output is the rake of the fracture 
-    Output is used in fRt to generate an array that transformations (rotates) the stress tensor into the the rake vector
-    Function is called by fSr where the transformation into the rake vector occurs
-    Contains optional print statements to show which statement is true
-    Method from pp 156-157 in Zoback (2010)
-    '''
-    A = Sf[2,1]
-    B = Sf[2,0]
-    if A > 0.00001 and B > 0.00001:
-        r = np.arctan(A/B) 
-        #print('r is case 1')
-    elif A > 0.00001 and B < 0.00001:
-        r = np.arctan(A/B) 
-        #print('r is case 2')
-    elif A < 0.00001 and B >= 0.00001:
-        r = math.radians(180)-np.arctan(A/-B)
-        #print('r is case 3')
-    elif A < 0.00001 and B < 0.00001:
-        r = np.arctan(-A/-B)-math.radians(180)
-        #print('r is case 4')
-    return r
-
-def transform_tensor_from_fracture_plane_to_rake(rake):
-    '''
-    Generates an array for that's used to transform the stress tensor from fracture plane coordinates into the rake vector
-    
-    Input is the rake of the fracture/fault generated by frake
-    Output is called by fSr used to transformation (rotate) the stress tensor into the frake vector 
-    where |Sr(3,1)| is the shear stress magnitude (tau)
-    Method from pp 156-157 in Zoback (2010)
-    '''
-    Rt = np.array([
-                [np.cos(rake),np.sin(rake),0],
-                [-np.sin(rake),np.cos(rake),0],
-                [0,0,1]
-                ])
-    return Rt

@@ -77,53 +77,7 @@ def make_effective_stress_tensor(S1,S2,S3,Pp):
     return result
 
 
-def geographic_rotation_array(alpha,beta,gamma):
-    '''Returns array used to transform an initial stress tensor into the geographic coordinate system 
-    
-        Args:   alpha (float) Euler angle alpha in degrees (refer to notes below)
-                beta (float) Euler angle alpha in degrees (refer to notes below)
-                gamma (float) Euler angle alpha in degrees (refer to notes below)
 
-        Returns:    Array used for transformation
-                    Referred to as Rs by Peska/Zoback 
-
-        Notes:  Function called by transform_from_initial_to_geographic (fSg) which does the 
-                matrix multiplication to execute the transformation
-
-                Geographic coordinates are X North, Y East, and Z Down.
-                
-                Defining the stress field in Euler angles:
-                    
-                    If S1 is vertical (normal faulting) then:
-                        alpha = the trend of SHmax - pi/2 (aka the azimuth in degrees minus 90 degrees)
-                        beta = the -ve trend of Sv (aka -90 for vertical stress)
-                        gamma = 0.
-                    
-                    If S1 is horizontal (strike slip or reverse faulting) then:
-                        alpha = trend of S1
-                        beta = -ve plunge of S1
-                        gamma = rake of S2
-                
-                NOTE Function used to be called fRs
-
-        Citation:   Peska and Zoback (1995)
-    '''
-    alpha = math.radians(alpha)
-    beta = math.radians(beta)
-    gamma = math.radians(gamma)
-
-    Rs = np.array([
-        [np.cos(alpha) * np.cos(beta), 
-            np.sin(alpha) * np.cos(beta), 
-            -np.sin(beta) ],
-        [np.cos(alpha) * np.sin(beta) * np.sin(gamma) - np.sin(alpha) * np.cos(gamma), 
-            np.sin(alpha) * np.sin(beta) * np.sin(gamma) + np.cos(alpha) * np.cos(gamma), 
-            np.cos(beta) * np.sin(gamma) ],
-        [np.cos(alpha) * np.sin(beta) * np.sin(gamma) + np.sin(alpha) * np.sin(gamma),
-            np.sin(alpha) * np.sin(beta) * np.cos(gamma) - np.cos(alpha) * np.sin(gamma),
-            np.cos(beta) * np.cos(gamma) ]
-    ])
-    return Rs 
 
 def borehole_rotation_array(well_azimuth,well_inclination):
     '''Returns array used to transform the initial stress tensor from geographic to borehole coordinates

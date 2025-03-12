@@ -30,7 +30,6 @@ from .hoops_stress_inclined_borehole import (
     radians_to_degrees,
     make_stress_tensor,
     make_effective_stress_tensor,
-    geographic_rotation_array,
     borehole_rotation_array,
     transform_from_initial_to_borehole,
     calculate_sigma_zz,
@@ -45,7 +44,8 @@ from .hoops_stress_inclined_borehole import (
 )
 
 from .transform_stress_tensor import (
-    Rs,
+    #Rs,
+    geographic_rotation_array,
     Rf,
     rake,
     Rt,

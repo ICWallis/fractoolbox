@@ -115,11 +115,11 @@ def estimate_shmin_cfc(Sv, Pp, mu):
 
     - Equation from Zoback (2010)
     
-        Args:   Pp Pore pressure (MPa) 
+        Args:   Pp Pore pressure (MPa)
                 Sv Overburden stress (MPa)
                 mu Coefficient of friction (unitless)
         
-        Coefficient of friction should be around 0.6 in the deep reservior
+        Coefficient of friction should be around 0.6 in the deep reservoir
         and around 0.3 in the clay cap and shallow aquifer zone 
             
         Returns: Estimate of Shmin (MPa)
