@@ -38,7 +38,7 @@ def simple_linear_Sv(maxdepth,obsdepth,density):
     gravity = 9.8
     
     # trapezoid integration with unit conversion from Pa to MPa
-    Sv_model = (integrate.cumtrapz(density_model * gravity, depth_model, initial=0)) * 1.e-6 
+    Sv_model = (integrate.cumulative_trapezoid(density_model * gravity, depth_model, initial=0)) * 1.e-6 
     
     # linear interpolation from the Sv model
     Sv_obsdepth = np.around((np.interp(obsdepth, depth_model, Sv_model)),2)
@@ -69,7 +69,7 @@ def Sv(depth, porosity, dry_rock_density, fluid_density):
     
     Notes:
     - The function assumes gravitational acceleration to be 9.8 m/s².
-    - The `integrate.cumtrapz` method is used for numerical integration.
+    - The `integrate.cumulative_trapezoid` method is used for numerical integration.
 
     Suggestions:
     - Use the following units: depth in meters, density in kg/m³, porosity as a decimal percentage. 
@@ -104,7 +104,7 @@ def Sv(depth, porosity, dry_rock_density, fluid_density):
     y = np.array(bulk_density) * 9.8  # density array * gravity
     
     # Integrate arrays calculate vertical stress in Pa and convert to MPa
-    vertical_stress = integrate.cumtrapz(y, x, initial=0)
+    vertical_stress = integrate.cumulative_trapezoid(y, x, initial=0)
     
     return vertical_stress
 
